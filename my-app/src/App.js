@@ -74,11 +74,10 @@ class App extends Component {
     }
   }
 
-  render() {
-    
+  render() {    
     return (
       <div className="app">
-         <h2 >LEAGUE STANDING</h2>
+         <h2> LEAGUE STANDING </h2>
         <Header>
           {this.state.buttons}
         </Header>
