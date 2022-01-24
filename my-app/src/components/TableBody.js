@@ -1,49 +1,45 @@
-import React from 'react';
-import Bundesliga from '../images/Bundesliga.png';
-import Eredivisie from '../images/Eredivisie.png';
-import LaLiga from '../images/LaLiga.png';
-import Ligue1 from '../images/Ligue1.png';
-import PremierLeague from '../images/PremierLeague.png';
-import SerieA from '../images/SerieA.png';
+import React from 'react'
 
-const LeagueInfo = (props) => {
-    let imgSrc;
-    switch (props.leagueCaption) {
-
-        case "Bundesliga":
-            imgSrc = Bundesliga;
-            break;
-
-        case "Eredivisie":
-            imgSrc = Eredivisie;
-            break;
-
-        case "Primera Division":
-            imgSrc = LaLiga;
-            break;
-
-        case "Ligue 1":
-            imgSrc = Ligue1;
-            break;
-
-        case "Premier League":
-            imgSrc = PremierLeague;
-            break;
-
-        case "Serie A":
-            imgSrc = SerieA;
-            break;
-
-        default:
-            imgSrc = LaLiga;
-            break;
-    }
-
+const TableBody = (props) => {
     return (
-        <div className="league-info">
-            <img src={imgSrc} alt="" />
-        </div>
-    );
-};
+        <table className="standings">
+            <tbody>
+                <tr className="table-head">
+                    <td className="team-position">
+                        #
+                    </td>
+                    <td className="team-name">
+                        Team
+                    </td>
+                    <td title="Matches played">
+                        MP
+                    </td>
+                    <td title="Wins">
+                        W
+                    </td>
+                    <td title="Draws">
+                        D
+                    </td>
+                    <td title="Losses">
+                        L
+                    </td>
+                    <td title="Goals for">
+                        GF
+                    </td>
+                    <td title="Goals against">
+                        GA
+                    </td>
+                    <td title="Goals difference">
+                        GD
+                    </td>
+                    <td title="Team points">
+                        Pts
+                    </td>
+                </tr>
+                {props.children}
+            </tbody>
+        </table>
+    )
+}
 
-export default LeagueInfo;
+export default TableBody

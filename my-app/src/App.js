@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import Header from '../components/Header';
-import Button from '../components/Button';
-import Row from '../components/Row';
-import TableBody from '../components/TableBody';
-import LeagueInfo from '../components/LeagueInfo';
+import Header from './components/Header';
+import Button from './components/Button';
+import Row from './components/Row';
+import TableBody from './components/TableBody';
+import LeagueInfo from './components/LeagueInfo';
 
 class App extends Component {
 
