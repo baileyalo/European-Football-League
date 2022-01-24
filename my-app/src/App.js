@@ -35,7 +35,7 @@ class App extends Component {
   }
 
   fetchData() {
-    const Token = 'c9275b8835ee462f8086cdc6ba7653d',
+    const Token = 'c9275b8835ee462f8086cdc6ba7653dc',
       leagueId = this.state.leagueId,
       URL = 'https://api.football-data.org/v2/competitions/' + leagueId + '/standings';
 
@@ -78,6 +78,7 @@ class App extends Component {
     
     return (
       <div className="app">
+         <h2 >LEAGUE STANDING</h2>
         <Header>
           {this.state.buttons}
         </Header>

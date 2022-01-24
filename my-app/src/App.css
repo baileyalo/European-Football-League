@@ -4,6 +4,15 @@
   max-width: 940px;
   margin: 0 auto;
 }
+h2 {
+  display: block;
+  font-size: 2.5em;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+}
 
 header{
   padding: 1.2em 0;
@@ -14,16 +23,16 @@ header button{
   border: none;
   border-radius: 2px;
   display: inline-block;
-  height: 36px;
+  height: 35px;
   line-height: 36px;
   padding: 0 2rem;
   text-transform: uppercase;
   vertical-align: middle;
   -webkit-tap-highlight-color: transparent;
   color: #fff;
-  background-color: #45df4c;
+  background-color: #327235;
   text-align: center;
-  letter-spacing: .5px;
+  letter-spacing: .2px;
   overflow: hidden;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -54,7 +63,7 @@ header button:active{
 
 .league-info h1{
   font-size: 1.8em;
-  font-weight: 400;
+  font-weight: 200;
   margin: 0 0 .5em;
 }
 .league-info span{
@@ -69,7 +78,7 @@ header button:active{
 
 .standings .table-head,
 .standings .team-position{
-  color: #e657bb; 
+  color: #e24141; 
 }
 
 .standings .team-position{
@@ -90,14 +99,14 @@ header button:active{
 }
 
 .standings .team-name{
-  width: 250px;
+  width: 255px;
   text-align: left;
   display: flex;
   align-items: center;
 }
 
 .crest{
-  width: 30px;
+  width: 35px;
   height: 30px;
   margin-right: 10px;
   display: flex;
