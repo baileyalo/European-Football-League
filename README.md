@@ -7,4 +7,4 @@ npm install in #root folder
 
 npm start in //my-app
 
-Demo: https://europeanleagues.netlify.app
+Demo: https://europeanleague.netlify.app/
