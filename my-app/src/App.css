@@ -4,15 +4,15 @@
   max-width: 940px;
   margin: 0 auto;
 }
+
 h2 {
-  display: block;
-  font-size: 2.5em;
-  margin-top: 0.83em;
-  margin-bottom: 0.83em;
-  margin-left: 0;
-  margin-right: 0;
-  font-weight: bold;
-}
+  background: #191a19;
+  color: #FFFFFF;
+  }
+
+  body{
+    background-color:white;
+  }
 
 header{
   padding: 1.2em 0;
@@ -78,7 +78,7 @@ header button:active{
 
 .standings .table-head,
 .standings .team-position{
-  color: #e24141; 
+  color: #cf1414; 
 }
 
 .standings .team-position{
