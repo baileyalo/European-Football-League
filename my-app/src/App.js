@@ -35,9 +35,9 @@ class App extends Component {
   }
 
   fetchData() {
-    const Token = 'c9275b8835ee462f8086cdc6ba7653dc',
+    const Token = 'b715fa41da9c4968ae82a1eafc5d5360',
       leagueId = this.state.leagueId,
-      URL = 'https://api.football-data.org/v2/competitions/' + leagueId + '/standings';
+      URL = 'https://api.football-data.org/v4/competitions/' + leagueId + '/standings';
 
     fetch(URL, { headers: { 'X-Auth-Token': Token } })
       .then((response) => response.json())
