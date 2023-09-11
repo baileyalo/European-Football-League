@@ -49,7 +49,6 @@ class App extends Component {
     fetch(URL, { headers: { "X-Auth-Token": Token}, mode: "no-cors"  })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("response", responseJson);
         const rows = [];
         responseJson.standings[0].table.map((item, index) => {
           const {
