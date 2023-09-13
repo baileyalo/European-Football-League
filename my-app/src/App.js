@@ -39,6 +39,7 @@ class App extends Component {
   }
 
   fetchData() {
+    const mysite = "http://localhost:3000"
     const Token = "b715fa41da9c4968ae82a1eafc5d5360",
       leagueId = this.state.leagueId,
       URL =
@@ -47,10 +48,11 @@ class App extends Component {
         "/standings?season=2023";
 
     fetch(URL, {
-      mode: "no-cors",
       method: "GET",
       headers: {
-        "X-Auth-Token": Token
+        "X-Auth-Token": Token,
+        "Access-Control-Allow-Origin": mysite,
+        "Access-Control-Allow-Headers": "Accept, Content-Type",
       },
     })
       .then((response) => response.json())

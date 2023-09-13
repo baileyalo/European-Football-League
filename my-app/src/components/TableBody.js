@@ -33,7 +33,7 @@ const TableBody = (props) => {
                         GD
                     </td>
                     <td title="Team points">
-                        Pts
+                        PTS
                     </td>
                 </tr>
                 {props.children}
