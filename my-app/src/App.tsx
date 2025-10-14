@@ -109,7 +109,7 @@ const App: React.FC = () => {
           <Row
             key={index}
             position={position}
-            crestURI={crest}
+            crest={crest}
             teamName={name}
             playedGames={playedGames}
             wins={won}

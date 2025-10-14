@@ -3,7 +3,7 @@ import { RowProps } from '../types';
 
 const Row: React.FC<RowProps> = ({
     position,
-    crestURI,
+    crest,
     teamName,
     playedGames,
     wins,
@@ -35,7 +35,7 @@ const Row: React.FC<RowProps> = ({
             </td>
             <td className="team-name">
                 <div className="team-crest">
-                    <img src={crestURI} alt={`${teamName} crest`} />
+                    <img src={crest} alt={`${teamName} crest`} />
                 </div>
                 <span style={{ fontWeight: '500' }}>{teamName}</span>
             </td>
