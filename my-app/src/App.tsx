@@ -105,8 +105,6 @@ const App: React.FC = () => {
           points,
         } = item;
         const { crest, name } = item.team;
-        console.log(crest, name);
-
         return (
           <Row
             key={index}
