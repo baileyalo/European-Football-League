@@ -3,7 +3,7 @@ import { TableBodyProps } from '../types';
 
 const TableBody: React.FC<TableBodyProps> = ({ children }) => {
     return (
-        <div style={{ overflowX: 'auto' }}>
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             <table className="standings-table">
                 <thead>
                     <tr>

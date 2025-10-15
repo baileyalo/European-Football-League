@@ -29,7 +29,7 @@ const Row: React.FC<RowProps> = ({
     };
 
     return (
-        <tr>
+        <tr className="table-row">
             <td className="team-position" style={getPositionStyle(position)}>
                 {position}
             </td>

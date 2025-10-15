@@ -43,6 +43,8 @@ export interface ButtonProps {
   handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   leagueId: string;
   text: string;
+  isActive?: boolean;
+  animationDelay?: number;
 }
 
 export interface RowProps {
@@ -70,6 +72,11 @@ export interface HeaderProps {
 
 export interface TableBodyProps {
   children: React.ReactNode;
+}
+
+export interface ThemeToggleProps {
+  isDarkMode: boolean;
+  onToggle: () => void;
 }
 
 // App State Types

@@ -4,6 +4,8 @@ import Button from './components/Button';
 import Row from './components/Row';
 import TableBody from './components/TableBody';
 import LeagueInfo from './components/LeagueInfo';
+import ThemeToggle from './components/ThemeToggleNew';
+import Footer from './components/Footer';
 import { StandingsResponse, League, Standing } from './types';
 
 const App: React.FC = () => {
@@ -13,6 +15,10 @@ const App: React.FC = () => {
   const [season, setSeason] = useState<string>(process.env.REACT_APP_CURRENT_SEASON || '2024');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  });
 
   const leagues: League = {
     'La Liga': 'PD',
@@ -32,6 +38,10 @@ const App: React.FC = () => {
 
   const handleSeasonChange = useCallback((newSeason: string) => {
     setSeason(newSeason);
+  }, []);
+
+  const handleThemeToggle = useCallback(() => {
+    setIsDarkMode(prev => !prev);
   }, []);
 
   const fetchData = useCallback(async () => {
@@ -144,12 +154,20 @@ const App: React.FC = () => {
     fetchData();
   }, [fetchData]);
 
-  const buttons = Object.entries(leagues).map(([name, id]) => (
+  useEffect(() => {
+    const theme = isDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [isDarkMode]);
+
+  const buttons = Object.entries(leagues).map(([name, id], index) => (
     <Button
       key={id}
       handleClick={handleLeagueClick}
       leagueId={id}
       text={name}
+      isActive={leagueId === id}
+      animationDelay={index}
     />
   ));
 
@@ -171,9 +189,11 @@ const App: React.FC = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }} className="fade-in">
+      {/* Theme toggle component */}
+      <ThemeToggle isDarkMode={isDarkMode} onToggle={handleThemeToggle} />
       <div className="container">
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }} className="slide-in-left">
           <h1 style={{ fontSize: '2.25rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>
             {process.env.REACT_APP_APP_NAME || 'European Football League'} Standings
           </h1>
@@ -181,15 +201,16 @@ const App: React.FC = () => {
         </div>
         
         <Header>
-          <div style={{ marginBottom: '1rem' }}>
+          <div style={{ marginBottom: '1rem' }} className="slide-in-right animate-delay-1">
             <h3 style={{ fontSize: '1.125rem', fontWeight: '600', color: '#374151', marginBottom: '0.5rem', textAlign: 'center' }}>
               Select Season
             </h3>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap', maxWidth: '300px', margin: '0 auto' }}>
               {['2024', '2025'].map((year) => (
                 <button
                   key={year}
                   onClick={() => handleSeasonChange(year)}
+                  className="season-button"
                   style={{
                     padding: '0.5rem 1rem',
                     backgroundColor: season === year ? '#0284c7' : '#f3f4f6',
@@ -218,23 +239,26 @@ const App: React.FC = () => {
               ))}
             </div>
           </div>
-          {buttons}
+          <div className="scale-in animate-delay-2" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem' }}>
+            {buttons}
+          </div>
         </Header>
         
         <div style={{ marginTop: '2rem' }}>
           {isLoading ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 0' }} className="bounce-in">
               <div className="loading-spinner"></div>
               <span style={{ marginLeft: '0.75rem', color: '#6b7280' }}>Loading standings...</span>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }} className="fade-in animate-delay-3">
               <LeagueInfo leagueCaption={leagueName} season={season} />
               <TableBody>{rows}</TableBody>
             </div>
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
