@@ -251,7 +251,7 @@ const App: React.FC = () => {
               <span style={{ marginLeft: '0.75rem', color: '#6b7280' }}>Loading standings...</span>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }} className="fade-in animate-delay-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} className="fade-in animate-delay-3">
               <LeagueInfo leagueCaption={leagueName} season={season} />
               <TableBody>{rows}</TableBody>
             </div>
