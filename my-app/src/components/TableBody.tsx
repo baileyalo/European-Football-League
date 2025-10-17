@@ -7,16 +7,16 @@ const TableBody: React.FC<TableBodyProps> = ({ children }) => {
             <table className="standings-table">
                 <thead>
                     <tr>
-                        <th style={{ width: '2rem' }}>#</th>
+                        <th style={{ width: '3rem' }}>#</th>
                         <th style={{ minWidth: '12rem' }}>Team</th>
-                        <th style={{ width: '3rem' }} title="Matches played">MP</th>
-                        <th style={{ width: '3rem' }} title="Wins">W</th>
-                        <th style={{ width: '3rem' }} title="Draws">D</th>
-                        <th style={{ width: '3rem' }} title="Losses">L</th>
-                        <th style={{ width: '3rem' }} title="Goals for">GF</th>
-                        <th style={{ width: '3rem' }} title="Goals against">GA</th>
-                        <th style={{ width: '3rem' }} title="Goals difference">GD</th>
-                        <th style={{ width: '3rem' }} title="Team points">PTS</th>
+                        <th style={{ width: '4rem' }} title="Matches played">MP</th>
+                        <th style={{ width: '4rem' }} title="Wins">W</th>
+                        <th style={{ width: '4rem' }} title="Draws">D</th>
+                        <th style={{ width: '4rem' }} title="Losses">L</th>
+                        <th style={{ width: '4rem' }} title="Goals for">GF</th>
+                        <th style={{ width: '4rem' }} title="Goals against">GA</th>
+                        <th style={{ width: '4rem' }} title="Goals difference">GD</th>
+                        <th style={{ width: '4rem' }} title="Team points">PTS</th>
                     </tr>
                 </thead>
                 <tbody>
