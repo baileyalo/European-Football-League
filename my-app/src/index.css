@@ -81,7 +81,7 @@ body {
   font-weight: 600;
   color: #6b7280;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.15em;
   border-bottom: 1px solid #e5e7eb;
 }
 
@@ -501,7 +501,7 @@ body {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .container {
     padding: 0.5rem;
     max-width: 100%;
