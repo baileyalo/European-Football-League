@@ -3,14 +3,22 @@
  * Keeps X-Auth-Token on the server (set FOOTBALL_API_TOKEN in Netlify env).
  */
 exports.handler = async (event) => {
-  const token = process.env.FOOTBALL_API_TOKEN;
-  const apiBase = process.env.FOOTBALL_API_URL || 'https://api.football-data.org/v4';
+  const token =
+    process.env.FOOTBALL_API_TOKEN ||
+    process.env.REACT_APP_FOOTBALL_API_TOKEN;
+  const apiBase =
+    process.env.FOOTBALL_API_URL ||
+    process.env.REACT_APP_FOOTBALL_API_URL ||
+    'https://api.football-data.org/v4';
 
   if (!token) {
     return {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: 'Server: FOOTBALL_API_TOKEN not configured' }),
+      body: JSON.stringify({
+        error:
+          'Server: Set FOOTBALL_API_TOKEN (or REACT_APP_FOOTBALL_API_TOKEN) in Netlify → Site configuration → Environment variables, then redeploy.',
+      }),
     };
   }
 
