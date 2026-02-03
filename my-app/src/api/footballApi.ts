@@ -1,66 +1,42 @@
 import type { StandingsResponse } from '../types';
 
-const getConfig = () => {
-  const token = process.env.REACT_APP_FOOTBALL_API_TOKEN;
-  const apiBaseUrl = process.env.REACT_APP_FOOTBALL_API_URL;
-  const corsProxies = [
-    process.env.REACT_APP_CORS_PROXY_1,
-    process.env.REACT_APP_CORS_PROXY_2,
-    process.env.REACT_APP_CORS_PROXY_3,
-  ].filter(Boolean) as string[];
-  return { token, apiBaseUrl, corsProxies };
-};
-
-function getErrorMessage(status: number): string {
-  if (status === 403) return 'API access forbidden. Please check your API token.';
-  if (status === 429) return 'API rate limit exceeded. Please try again later.';
-  if (status === 404) return 'League data not found for the current season.';
-  return `HTTP error! status: ${status}`;
+/** Base URL for standings API. Same origin on Netlify; set REACT_APP_STANDINGS_API_URL for local dev (e.g. your deployed site URL). */
+function getStandingsBaseUrl(): string {
+  if (typeof process.env.REACT_APP_STANDINGS_API_URL === 'string' && process.env.REACT_APP_STANDINGS_API_URL) {
+    return process.env.REACT_APP_STANDINGS_API_URL.replace(/\/$/, '');
+  }
+  return '';
 }
 
 export async function fetchStandings(
   leagueId: string,
   season: string
 ): Promise<{ data: StandingsResponse; error: null } | { data: null; error: string }> {
-  const { token, apiBaseUrl, corsProxies } = getConfig();
+  const base = getStandingsBaseUrl();
+  const url = `${base}/.netlify/functions/standings?leagueId=${encodeURIComponent(leagueId)}&season=${encodeURIComponent(season)}`;
 
-  if (!token || !apiBaseUrl) {
-    return { data: null, error: 'API configuration missing. Please check environment variables.' };
-  }
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
 
-  const apiUrl = `${apiBaseUrl}/competitions/${leagueId}/standings?season=${season}`;
-  let lastError: Error | null = null;
+    const body = await response.json().catch(() => ({}));
 
-  for (const proxy of corsProxies) {
-    try {
-      const url = `${proxy}${encodeURIComponent(apiUrl)}`;
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-Auth-Token': token,
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(getErrorMessage(response.status));
-      }
-
-      const data: StandingsResponse = await response.json();
-
-      if (!data.standings?.[0]?.table) {
-        throw new Error('Invalid data structure received from API');
-      }
-
-      return { data, error: null };
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error('Unknown error');
+    if (!response.ok) {
+      const message =
+        typeof body?.error === 'string' ? body.error : response.status === 500 ? 'Server configuration error' : `Request failed (${response.status})`;
+      return { data: null, error: message };
     }
-  }
 
-  return {
-    data: null,
-    error: lastError?.message ?? 'All CORS proxies failed. Please try again later.',
-  };
+    const data = body as StandingsResponse;
+    if (!data?.standings?.[0]?.table) {
+      return { data: null, error: 'Invalid data structure received' };
+    }
+
+    return { data, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Failed to fetch';
+    return { data: null, error: message };
+  }
 }

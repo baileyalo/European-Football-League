@@ -25,19 +25,8 @@ A React app that shows live standings for top European football leagues (Premier
 
 2. **Configure environment**
 
-   Copy the example env file and add your API token and optional settings:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` and set at least:
-
-   - `REACT_APP_FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token
-   - `REACT_APP_FOOTBALL_API_URL` – Usually `https://api.football-data.org/v4`
-   - One or more CORS proxy URLs (`REACT_APP_CORS_PROXY_1`, etc.) if the API is called from the browser
-
-   See `.env.example` for all options (app name, season, proxies).
+   - **Local dev with Netlify** (recommended): run `netlify dev` so the app and the standings proxy function run together. Set `FOOTBALL_API_TOKEN` and optionally `FOOTBALL_API_URL` in a `.env` file (see `.env.example`).
+   - **Local dev with `npm start` only**: create `.env` and set `REACT_APP_STANDINGS_API_URL` to your deployed site (e.g. `https://euleague.netlify.app`) so the app calls that site’s function. No token in the client.
 
 3. **Run the app**
 
@@ -45,7 +34,13 @@ A React app that shows live standings for top European football leagues (Premier
    npm start
    ```
 
-   Open [http://localhost:3000](http://localhost:3000).
+   Or use Netlify CLI for full local parity:
+
+   ```bash
+   netlify dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) (or the URL shown by `netlify dev`).
 
 ## Scripts
 
@@ -88,9 +83,14 @@ src/
 - **Create React App** (react-scripts)
 - **CSS** – Custom properties for theming, no UI framework
 
-## Deployment
+## Deployment (Netlify)
 
-The app is a static SPA. Build with `npm run build` and serve the `build/` folder. See `DEPLOYMENT.md` and `netlify.toml` for Netlify.
+1. Build with `npm run build`; Netlify will run this and publish the `build/` folder.
+2. **Set environment variables in the Netlify dashboard** (Site → Environment variables):
+   - `FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token (required for standings).
+   - `FOOTBALL_API_URL` – Optional; default is `https://api.football-data.org/v4`.
+
+The app uses a **Netlify serverless function** (`netlify/functions/standings.js`) to call the Football Data API. The token is only used on the server, so CORS and “Failed to fetch” from the browser are avoided. See `DEPLOYMENT.md` and `netlify.toml` for more.
 
 ## Learn more
 
