@@ -1,70 +1,98 @@
-# Getting Started with Create React App
+# European Football League Standings
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React app that shows live standings for top European football leagues (Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie). Built with Create React App and TypeScript.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Live standings** – View tables for multiple leagues and seasons
+- **Dark / light theme** – Toggle with system preference support and persistence
+- **Responsive layout** – Works on mobile and desktop
+- **Performance** – Memoized components, data-driven rendering, CSS variables for theming
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (v16+)
+- A [Football Data API](https://www.football-data.org/) token (free tier available)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Setup
 
-### `npm test`
+1. **Clone and install**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```bash
+   cd my-app
+   npm install
+   ```
 
-### `npm run build`
+2. **Configure environment**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   Copy the example env file and add your API token and optional settings:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   cp .env.example .env
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   Edit `.env` and set at least:
 
-### `npm run eject`
+   - `REACT_APP_FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token
+   - `REACT_APP_FOOTBALL_API_URL` – Usually `https://api.football-data.org/v4`
+   - One or more CORS proxy URLs (`REACT_APP_CORS_PROXY_1`, etc.) if the API is called from the browser
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   See `.env.example` for all options (app name, season, proxies).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Run the app**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   npm start
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Scripts
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| Command        | Description                    |
+|----------------|--------------------------------|
+| `npm start`    | Run dev server at :3000       |
+| `npm test`     | Run tests (watch mode)        |
+| `npm run build`| Production build in `build/`  |
+| `npm run eject`| Eject from Create React App   |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Project structure
 
-### Code Splitting
+```
+src/
+├── api/
+│   └── footballApi.ts     # API config & fetchStandings()
+├── constants/
+│   └── leagues.ts        # LEAGUES map, SEASON_OPTIONS
+├── hooks/
+│   ├── useStandings.ts   # Standings data, loading, error, retry
+│   └── useTheme.ts       # Theme state & localStorage
+├── components/
+│   ├── Button.tsx        # League selector button
+│   ├── Footer.tsx
+│   ├── Header.tsx
+│   ├── LeagueInfo.tsx    # League logo & title
+│   ├── Row.tsx           # Standings table row
+│   ├── TableBody.tsx     # Standings table wrapper
+│   └── ThemeToggle.tsx
+├── types/
+│   └── index.ts          # API & component types
+├── App.tsx
+├── index.css             # Global styles, CSS variables, theme
+└── index.tsx
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Tech stack
 
-### Analyzing the Bundle Size
+- **React 19** with TypeScript
+- **Create React App** (react-scripts)
+- **CSS** – Custom properties for theming, no UI framework
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Deployment
 
-### Making a Progressive Web App
+The app is a static SPA. Build with `npm run build` and serve the `build/` folder. See `DEPLOYMENT.md` and `netlify.toml` for Netlify.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Learn more
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Create React App docs](https://facebook.github.io/create-react-app/docs/getting-started)
+- [Football Data API](https://www.football-data.org/documentation/quickstart)

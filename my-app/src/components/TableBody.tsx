@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableBodyProps } from '../types';
 
-const TableBody: React.FC<TableBodyProps> = ({ children }) => {
+const TableBody: React.FC<TableBodyProps> = React.memo(({ children }) => {
     return (
         <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             <table className="standings-table">
@@ -25,6 +25,7 @@ const TableBody: React.FC<TableBodyProps> = ({ children }) => {
             </table>
         </div>
     );
-};
+});
+TableBody.displayName = 'TableBody';
 
 export default TableBody;

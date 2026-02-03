@@ -1,7 +1,7 @@
 import React from 'react';
 import { RowProps } from '../types';
 
-const Row: React.FC<RowProps> = ({
+const Row: React.FC<RowProps> = React.memo(({
     position,
     crest,
     teamName,
@@ -15,37 +15,28 @@ const Row: React.FC<RowProps> = ({
     points
 }) => {
 
-    const getPositionStyle = (pos: number): React.CSSProperties => {
-        if (pos <= 4) return { color: '#16a34a', fontWeight: 'bold' }; // Champions League
-        if (pos <= 6) return { color: '#2563eb', fontWeight: 'bold' }; // Europa League
-        if (pos >= 18) return { color: '#dc2626', fontWeight: 'bold' }; // Relegation
-        return { color: '#6b7280' };
-    };
-
-    const getGoalDifferenceStyle = (gd: number): React.CSSProperties => {
-        if (gd > 0) return { color: '#16a34a', fontWeight: 'bold' };
-        if (gd < 0) return { color: '#dc2626', fontWeight: 'bold' };
-        return { color: '#6b7280', fontWeight: 'bold' };
-    };
+    const positionClass =
+        position <= 4 ? 'pos-cl' : position <= 6 ? 'pos-el' : position >= 18 ? 'pos-relegation' : 'pos-mid';
+    const gdClass = goalDifference > 0 ? 'gd-positive' : goalDifference < 0 ? 'gd-negative' : 'gd-zero';
 
     return (
         <tr className="table-row">
-            <td className="team-position" style={getPositionStyle(position)}>
+            <td className={`team-position ${positionClass}`}>
                 {position}
             </td>
             <td className="team-name">
                 <div className="team-crest">
                     <img src={crest} alt={`${teamName} crest`} />
                 </div>
-                <span style={{ fontWeight: '500' }}>{teamName}</span>
+                <span className="team-name-text">{teamName}</span>
             </td>
-            <td style={{ textAlign: 'center' }}>{playedGames}</td>
-            <td style={{ textAlign: 'center', color: '#16a34a', fontWeight: '500' }}>{wins}</td>
-            <td style={{ textAlign: 'center', color: '#eab308', fontWeight: '500' }}>{draws}</td>
-            <td style={{ textAlign: 'center', color: '#dc2626', fontWeight: '500' }}>{losses}</td>
-            <td style={{ textAlign: 'center', fontWeight: '500' }}>{goalsFor}</td>
-            <td style={{ textAlign: 'center', fontWeight: '500' }}>{goalsAgainst}</td>
-            <td style={{ textAlign: 'center', ...getGoalDifferenceStyle(goalDifference) }}>
+            <td className="cell-center">{playedGames}</td>
+            <td className="cell-center stat-wins">{wins}</td>
+            <td className="cell-center stat-draws">{draws}</td>
+            <td className="cell-center stat-losses">{losses}</td>
+            <td className="cell-center">{goalsFor}</td>
+            <td className="cell-center">{goalsAgainst}</td>
+            <td className={`cell-center ${gdClass}`}>
                 {goalDifference > 0 ? '+' : ''}{goalDifference}
             </td>
             <td className="team-points">
@@ -53,6 +44,7 @@ const Row: React.FC<RowProps> = ({
             </td>
         </tr>
     );
-};
+});
+Row.displayName = 'Row';
 
 export default Row;

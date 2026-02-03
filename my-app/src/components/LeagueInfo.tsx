@@ -1,7 +1,7 @@
 import React from 'react';
 import { LeagueInfoProps } from '../types';
 
-const LeagueInfo: React.FC<LeagueInfoProps> = ({ leagueCaption, season = '2024' }) => {
+const LeagueInfo: React.FC<LeagueInfoProps> = React.memo(({ leagueCaption, season = '2024' }) => {
     const getLeagueLogo = (leagueName: string): string => {
         const logoPath = (() => {
             switch (leagueName) {
@@ -21,13 +21,11 @@ const LeagueInfo: React.FC<LeagueInfoProps> = ({ leagueCaption, season = '2024' 
                     return '/LaLiga.png';
             }
         })();
-        
-        console.log(`Loading logo for ${leagueName}: ${logoPath}`);
         return logoPath;
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2rem' }}>
+        <div className="league-info">
             <div className="league-logo">
                 <img 
                     src={getLeagueLogo(leagueCaption)} 
@@ -38,10 +36,11 @@ const LeagueInfo: React.FC<LeagueInfoProps> = ({ leagueCaption, season = '2024' 
                     }}
                 />
             </div>
-            <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', marginBottom: '0.5rem' }}>{leagueCaption}</h1>
-            <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>{season}-{String(parseInt(season) + 1).slice(-2)} Season</p>
+            <h2 className="league-info-title">{leagueCaption}</h2>
+            <p className="league-info-season">{season}-{String(parseInt(season, 10) + 1).slice(-2)} Season</p>
         </div>
     );
-};
+});
+LeagueInfo.displayName = 'LeagueInfo';
 
 export default LeagueInfo;

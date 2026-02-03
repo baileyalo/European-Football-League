@@ -1,7 +1,7 @@
 import React from 'react';
 import { ButtonProps } from '../types';
 
-const Button: React.FC<ButtonProps> = ({ handleClick, leagueId, text, isActive = false, animationDelay = 0 }) => {
+const Button: React.FC<ButtonProps> = React.memo(({ handleClick, leagueId, text, isActive = false, animationDelay = 0 }) => {
     return (
         <button 
             onClick={handleClick} 
@@ -15,6 +15,7 @@ const Button: React.FC<ButtonProps> = ({ handleClick, leagueId, text, isActive =
             {text}
         </button>
     );
-};
+});
+Button.displayName = 'Button';
 
 export default Button;
