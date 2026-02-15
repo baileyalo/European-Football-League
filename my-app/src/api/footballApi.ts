@@ -1,4 +1,4 @@
-import type { StandingsResponse } from '../types';
+import type { StandingsResponse, TeamInfo } from '../types';
 
 /** Base URL for standings API. Same origin on Netlify; set REACT_APP_STANDINGS_API_URL for local dev (e.g. your deployed site URL). */
 function getStandingsBaseUrl(): string {
@@ -32,6 +32,38 @@ export async function fetchStandings(
     const data = body as StandingsResponse;
     if (!data?.standings?.[0]?.table) {
       return { data: null, error: 'Invalid data structure received' };
+    }
+
+    return { data, error: null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Failed to fetch';
+    return { data: null, error: message };
+  }
+}
+
+export async function fetchTeam(
+  teamId: number
+): Promise<{ data: TeamInfo; error: null } | { data: null; error: string }> {
+  const base = getStandingsBaseUrl();
+  const url = `${base}/.netlify/functions/team?id=${encodeURIComponent(teamId)}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+    });
+
+    const body = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const message =
+        typeof body?.error === 'string' ? body.error : response.status === 500 ? 'Server configuration error' : `Request failed (${response.status})`;
+      return { data: null, error: message };
+    }
+
+    const data = body as TeamInfo;
+    if (!data?.id) {
+      return { data: null, error: 'Invalid team data received' };
     }
 
     return { data, error: null };

@@ -8,6 +8,7 @@ import ThemeToggle from './components/ThemeToggle';
 import Footer from './components/Footer';
 import { useTheme } from './hooks/useTheme';
 import { useStandings } from './hooks/useStandings';
+import { fetchTeam } from './api/footballApi';
 import { LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
 const App: React.FC = () => {
@@ -19,6 +20,19 @@ const App: React.FC = () => {
   const handleLeagueClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     const id = e.currentTarget.getAttribute('data-leagueid');
     if (id) setLeagueId(id);
+  }, []);
+
+  const handleVisitTeamWebsite = useCallback(async (teamId: number) => {
+    const result = await fetchTeam(teamId);
+    if (result.error) {
+      alert(result.error);
+      return;
+    }
+    if (result.data?.website) {
+      window.open(result.data.website, '_blank', 'noopener,noreferrer');
+    } else {
+      alert('No website available for this team.');
+    }
   }, []);
 
   const leagueButtons = useMemo(
@@ -44,6 +58,8 @@ const App: React.FC = () => {
         position={item.position}
         crest={item.team.crest}
         teamName={item.team.name}
+        teamId={item.team.id}
+        onVisitWebsite={handleVisitTeamWebsite}
         playedGames={item.playedGames}
         wins={item.won}
         draws={item.draw}
@@ -54,7 +70,7 @@ const App: React.FC = () => {
         points={item.points}
       />
     ));
-  }, [standings]);
+  }, [standings, handleVisitTeamWebsite]);
 
   if (error) {
     return (

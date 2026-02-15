@@ -55,6 +55,16 @@ REACT_APP_ENABLE_MOCK_DATA=false
    - Click "Deploy site"
    - Wait for build to complete
 
+### 🧪 Testing (optional before deploy):
+
+From `my-app`, run tests once (e.g. in CI or before pushing):
+
+```bash
+npm test -- --watchAll=false
+```
+
+See the root **README.md** → **Testing** for full test documentation (setup, test cases, and how tests mock `useTheme` and `useStandings`).
+
 ### ✅ Features Included:
 
 - **SPA Routing:** All routes redirect to index.html
@@ -62,4 +72,6 @@ REACT_APP_ENABLE_MOCK_DATA=false
 - **Caching:** Optimized cache headers for static assets
 - **Environment Variables:** Secure API configuration
 - **Production Build:** Optimized and minified
+- **Tests:** Jest + React Testing Library; 10 App tests (see README)
+- **Team website:** `netlify/functions/team.js` fetches team details (website) for the “Website” link per team
 

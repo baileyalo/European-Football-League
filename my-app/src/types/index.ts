@@ -47,10 +47,18 @@ export interface ButtonProps {
   animationDelay?: number;
 }
 
+export interface TeamInfo {
+  id: number;
+  name: string;
+  website: string | null;
+}
+
 export interface RowProps {
   position: number;
   crest: string;
   teamName: string;
+  teamId: number;
+  onVisitWebsite: (teamId: number) => void;
   playedGames: number;
   wins: number;
   draws: number;
