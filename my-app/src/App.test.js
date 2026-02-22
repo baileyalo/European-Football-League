@@ -151,8 +151,7 @@ it('displays Select Season heading', () => {
 });
 
 it('team name opens team detail sheet; Visit website opens team site', async () => {
-  const fakeWindow = { location: { href: '' }, close: jest.fn() };
-  const openSpy = jest.spyOn(window, 'open').mockImplementation(() => fakeWindow);
+  const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
   render(<App />);
   const teamNameButton = screen.getByRole('button', { name: /Visit Team A website/i });
   await userEvent.click(teamNameButton);
@@ -167,8 +166,7 @@ it('team name opens team detail sheet; Visit website opens team site', async () 
   });
   const visitWebsiteBtn = screen.getByRole('button', { name: /Visit website/i });
   await userEvent.click(visitWebsiteBtn);
-  expect(openSpy).toHaveBeenCalledWith('', '_blank', 'noopener,noreferrer');
-  expect(fakeWindow.location.href).toBe('https://teama.example.com');
+  expect(openSpy).toHaveBeenCalledWith('https://teama.example.com', '_blank', 'noopener,noreferrer');
   openSpy.mockRestore();
 });
 

@@ -45,12 +45,7 @@ const App: React.FC = () => {
   }, []);
 
   const handleVisitWebsiteFromDetail = useCallback((url: string) => {
-    const newWindow = window.open('', '_blank', 'noopener,noreferrer');
-    if (newWindow) {
-      newWindow.location.href = url;
-    } else {
-      window.location.href = url;
-    }
+    window.open(url, '_blank', 'noopener,noreferrer');
   }, []);
 
   // Load scorers for current league/season when team detail is open (for top scorer)
