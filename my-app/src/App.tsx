@@ -9,8 +9,9 @@ import Footer from './components/Footer';
 import TeamDetail from './components/TeamDetail';
 import { useTheme } from './hooks/useTheme';
 import { useStandings } from './hooks/useStandings';
-import { fetchTeam } from './api/footballApi';
+import { fetchTeam, fetchScorers } from './api/footballApi';
 import type { TeamInfo } from './types';
+import type { ScorerEntry } from './types';
 import { LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
 const App: React.FC = () => {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   const [season, setSeason] = React.useState(process.env.REACT_APP_CURRENT_SEASON || '2024');
   const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
   const [teamDetailLoading, setTeamDetailLoading] = useState(false);
+  const [scorersCache, setScorersCache] = useState<Record<string, ScorerEntry[]>>({});
   const { isDarkMode, toggleTheme } = useTheme();
   const { leagueName, standings, isLoading, error, retry } = useStandings(leagueId, season);
 
@@ -50,6 +52,25 @@ const App: React.FC = () => {
       window.location.href = url;
     }
   }, []);
+
+  // Load scorers for current league/season when team detail is open (for top scorer)
+  React.useEffect(() => {
+    if (!selectedTeam || !leagueId || !season) return;
+    const key = `${leagueId}-${season}`;
+    if (scorersCache[key]) return;
+    fetchScorers(leagueId, season).then((res) => {
+      if (res.data) setScorersCache((c) => ({ ...c, [key]: res.data! }));
+    });
+  }, [selectedTeam, leagueId, season, scorersCache]);
+
+  const topScorerForSelected = useMemo(() => {
+    if (!selectedTeam) return null;
+    const key = `${leagueId}-${season}`;
+    const list = scorersCache[key];
+    if (!list?.length) return null;
+    const entry = list.find((s) => s.team.id === selectedTeam.id);
+    return entry ? { name: entry.player.name, goals: entry.goals } : null;
+  }, [selectedTeam, leagueId, season, scorersCache]);
 
   const leagueButtons = useMemo(
     () =>
@@ -152,6 +173,7 @@ const App: React.FC = () => {
       <TeamDetail
         team={selectedTeam}
         loading={teamDetailLoading}
+        topScorer={topScorerForSelected}
         onClose={handleCloseTeamDetail}
         onVisitWebsite={handleVisitWebsiteFromDetail}
       />

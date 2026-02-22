@@ -18,10 +18,11 @@ jest.mock('./hooks/useStandings', () => ({
 jest.mock('./api/footballApi', () => ({
   fetchStandings: jest.fn(),
   fetchTeam: jest.fn(),
+  fetchScorers: jest.fn(),
 }));
 
 const { useStandings } = require('./hooks/useStandings');
-const { fetchTeam } = require('./api/footballApi');
+const { fetchTeam, fetchScorers } = require('./api/footballApi');
 
 const mockStandings = [
   {
@@ -62,7 +63,17 @@ beforeEach(() => {
     },
     error: null,
   });
+  fetchScorers.mockResolvedValue({ data: [], error: null });
 });
+
+function mockScorersWithTopScorer() {
+  fetchScorers.mockResolvedValue({
+    data: [
+      { player: { name: 'Star Striker' }, team: { id: 1 }, goals: 14 },
+    ],
+    error: null,
+  });
+}
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -159,4 +170,16 @@ it('team name opens team detail sheet; Visit website opens team site', async () 
   expect(openSpy).toHaveBeenCalledWith('', '_blank', 'noopener,noreferrer');
   expect(fakeWindow.location.href).toBe('https://teama.example.com');
   openSpy.mockRestore();
+});
+
+it('shows top scorer in team detail when scorers API returns data for that team', async () => {
+  mockScorersWithTopScorer();
+  render(<App />);
+  const teamNameButton = screen.getByRole('button', { name: /Visit Team A website/i });
+  await userEvent.click(teamNameButton);
+  await waitFor(() => {
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByText(/Star Striker/)).toBeInTheDocument();
+    expect(within(dialog).getByText(/14 goals/)).toBeInTheDocument();
+  });
 });

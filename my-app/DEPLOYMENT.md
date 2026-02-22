@@ -14,7 +14,7 @@ Your European Football League app is now ready for Netlify deployment.
 #### **Environment Variables (in Netlify Dashboard):**
 Add these in Site Settings > Environment Variables:
 
-**Required for Netlify functions (standings + team detail):**
+**Required for Netlify functions (standings, team detail, top scorers):**
 - `FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token
 - `FOOTBALL_API_URL` – Optional; default is `https://api.football-data.org/v4`
 
@@ -44,7 +44,7 @@ Add these in Site Settings > Environment Variables:
 
 4. **Add Environment Variables:**
    - Go to Site Settings > Environment Variables
-   - Add the variables listed above (at least `FOOTBALL_API_TOKEN` for standings and team detail)
+   - Add the variables listed above (at least `FOOTBALL_API_TOKEN` for standings, team detail, and top scorers)
 
 5. **Deploy:**
    - Click "Deploy site"
@@ -67,6 +67,6 @@ See the root **README.md** → **Testing** for full test documentation (setup, t
 - **Caching:** Optimized cache headers for static assets
 - **Environment Variables:** Secure API configuration
 - **Production Build:** Optimized and minified
-- **Tests:** Jest + React Testing Library; 10 App tests (see README)
-- **Team detail:** `netlify/functions/team.js` fetches team data (venue, coach, squad, website) for the team detail sheet when a user taps a team name
+- **Tests:** Jest + React Testing Library; 11 App tests (see README)
+- **Team detail:** `netlify/functions/team.js` fetches team data (stadium, coach, squad, website). `netlify/functions/scorers.js` fetches top scorers per league/season so each team’s top scorer can be shown in the detail sheet.
 

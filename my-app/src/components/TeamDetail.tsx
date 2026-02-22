@@ -23,9 +23,15 @@ function groupSquad(squad: SquadPlayer[]): { position: string; players: SquadPla
     }));
 }
 
+export interface TopScorer {
+  name: string;
+  goals: number;
+}
+
 interface TeamDetailProps {
   team: TeamInfo | null;
   loading: boolean;
+  topScorer: TopScorer | null;
   onClose: () => void;
   onVisitWebsite: (url: string) => void;
 }
@@ -33,6 +39,7 @@ interface TeamDetailProps {
 const TeamDetail: React.FC<TeamDetailProps> = ({
   team,
   loading,
+  topScorer,
   onClose,
   onVisitWebsite,
 }) => {
@@ -66,7 +73,7 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
             <div className="team-detail-meta">
               {team.venue && (
                 <p className="team-detail-row">
-                  <span className="team-detail-label">Venue</span>
+                  <span className="team-detail-label">Stadium</span>
                   <span className="team-detail-value">{team.venue}</span>
                 </p>
               )}
@@ -74,6 +81,12 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
                 <p className="team-detail-row">
                   <span className="team-detail-label">Coach</span>
                   <span className="team-detail-value">{team.coach.name}</span>
+                </p>
+              )}
+              {topScorer && (
+                <p className="team-detail-row">
+                  <span className="team-detail-label">Top scorer</span>
+                  <span className="team-detail-value">{topScorer.name} ({topScorer.goals} goals)</span>
                 </p>
               )}
             </div>

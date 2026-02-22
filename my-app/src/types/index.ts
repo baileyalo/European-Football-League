@@ -100,3 +100,10 @@ export interface ThemeToggleProps {
 export interface League {
   [key: string]: string;
 }
+
+/** One entry from the competition scorers endpoint (for team top scorer). */
+export interface ScorerEntry {
+  player: { name: string };
+  team: { id: number };
+  goals: number;
+}
