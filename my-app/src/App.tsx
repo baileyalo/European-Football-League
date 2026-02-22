@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Header from './components/Header';
 import Button from './components/Button';
 import Row from './components/Row';
@@ -6,14 +6,18 @@ import TableBody from './components/TableBody';
 import LeagueInfo from './components/LeagueInfo';
 import ThemeToggle from './components/ThemeToggle';
 import Footer from './components/Footer';
+import TeamDetail from './components/TeamDetail';
 import { useTheme } from './hooks/useTheme';
 import { useStandings } from './hooks/useStandings';
 import { fetchTeam } from './api/footballApi';
+import type { TeamInfo } from './types';
 import { LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
 const App: React.FC = () => {
   const [leagueId, setLeagueId] = React.useState('PL');
   const [season, setSeason] = React.useState(process.env.REACT_APP_CURRENT_SEASON || '2024');
+  const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
+  const [teamDetailLoading, setTeamDetailLoading] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const { leagueName, standings, isLoading, error, retry } = useStandings(leagueId, season);
 
@@ -22,16 +26,28 @@ const App: React.FC = () => {
     if (id) setLeagueId(id);
   }, []);
 
-  const handleVisitTeamWebsite = useCallback(async (teamId: number) => {
+  const handleTeamNameClick = useCallback(async (teamId: number) => {
+    setSelectedTeam(null);
+    setTeamDetailLoading(true);
     const result = await fetchTeam(teamId);
+    setTeamDetailLoading(false);
     if (result.error) {
       alert(result.error);
       return;
     }
-    if (result.data?.website) {
-      window.open(result.data.website, '_blank', 'noopener,noreferrer');
+    if (result.data) setSelectedTeam(result.data);
+  }, []);
+
+  const handleCloseTeamDetail = useCallback(() => {
+    setSelectedTeam(null);
+  }, []);
+
+  const handleVisitWebsiteFromDetail = useCallback((url: string) => {
+    const newWindow = window.open('', '_blank', 'noopener,noreferrer');
+    if (newWindow) {
+      newWindow.location.href = url;
     } else {
-      alert('No website available for this team.');
+      window.location.href = url;
     }
   }, []);
 
@@ -59,7 +75,7 @@ const App: React.FC = () => {
         crest={item.team.crest}
         teamName={item.team.name}
         teamId={item.team.id}
-        onVisitWebsite={handleVisitTeamWebsite}
+        onVisitWebsite={handleTeamNameClick}
         playedGames={item.playedGames}
         wins={item.won}
         draws={item.draw}
@@ -70,7 +86,7 @@ const App: React.FC = () => {
         points={item.points}
       />
     ));
-  }, [standings, handleVisitTeamWebsite]);
+  }, [standings, handleTeamNameClick]);
 
   if (error) {
     return (
@@ -133,6 +149,12 @@ const App: React.FC = () => {
         </div>
       </div>
       <Footer />
+      <TeamDetail
+        team={selectedTeam}
+        loading={teamDetailLoading}
+        onClose={handleCloseTeamDetail}
+        onVisitWebsite={handleVisitWebsiteFromDetail}
+      />
     </div>
   );
 };

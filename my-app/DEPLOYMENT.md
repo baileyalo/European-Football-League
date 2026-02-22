@@ -14,18 +14,13 @@ Your European Football League app is now ready for Netlify deployment.
 #### **Environment Variables (in Netlify Dashboard):**
 Add these in Site Settings > Environment Variables:
 
-```
-REACT_APP_FOOTBALL_API_URL=https://api.football-data.org/v4
-REACT_APP_FOOTBALL_API_TOKEN=b715fa41da9c4968ae82a1eafc5d5360
-REACT_APP_CORS_PROXY_1=https://api.allorigins.win/raw?url=
-REACT_APP_CORS_PROXY_2=https://corsproxy.io/?
-REACT_APP_CORS_PROXY_3=https://thingproxy.freeboard.io/fetch/
-REACT_APP_APP_NAME=European Football League
-REACT_APP_VERSION=0.2.0
-REACT_APP_CURRENT_SEASON=2024
-REACT_APP_DEBUG_MODE=false
-REACT_APP_ENABLE_MOCK_DATA=false
-```
+**Required for Netlify functions (standings + team detail):**
+- `FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token
+- `FOOTBALL_API_URL` – Optional; default is `https://api.football-data.org/v4`
+
+**Optional (app display):**
+- `REACT_APP_APP_NAME` – e.g. European Football League
+- `REACT_APP_CURRENT_SEASON` – e.g. 2024
 
 ### 📋 Deployment Steps:
 
@@ -49,7 +44,7 @@ REACT_APP_ENABLE_MOCK_DATA=false
 
 4. **Add Environment Variables:**
    - Go to Site Settings > Environment Variables
-   - Add all the variables listed above
+   - Add the variables listed above (at least `FOOTBALL_API_TOKEN` for standings and team detail)
 
 5. **Deploy:**
    - Click "Deploy site"
@@ -63,7 +58,7 @@ From `my-app`, run tests once (e.g. in CI or before pushing):
 npm test -- --watchAll=false
 ```
 
-See the root **README.md** → **Testing** for full test documentation (setup, test cases, and how tests mock `useTheme` and `useStandings`).
+See the root **README.md** → **Testing** for full test documentation (setup, test cases, mocks for `useTheme`, `useStandings`, and `footballApi`).
 
 ### ✅ Features Included:
 
@@ -73,5 +68,5 @@ See the root **README.md** → **Testing** for full test documentation (setup, t
 - **Environment Variables:** Secure API configuration
 - **Production Build:** Optimized and minified
 - **Tests:** Jest + React Testing Library; 10 App tests (see README)
-- **Team website:** `netlify/functions/team.js` fetches team details (website) for the “Website” link per team
+- **Team detail:** `netlify/functions/team.js` fetches team data (venue, coach, squad, website) for the team detail sheet when a user taps a team name
 

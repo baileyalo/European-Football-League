@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -47,7 +47,21 @@ beforeEach(() => {
     error: null,
     retry: mockRetry,
   });
-  fetchTeam.mockResolvedValue({ data: { id: 1, name: 'Team A', website: 'https://teama.example.com' }, error: null });
+  fetchTeam.mockResolvedValue({
+    data: {
+      id: 1,
+      name: 'Team A',
+      crest: 'https://crest.a',
+      website: 'https://teama.example.com',
+      venue: 'Team A Stadium',
+      coach: { name: 'Coach Smith' },
+      squad: [
+        { name: 'Player One', position: 'Goalkeeper', shirtNumber: 1 },
+        { name: 'Player Two', position: 'Defence', shirtNumber: 2 },
+      ],
+    },
+    error: null,
+  });
 });
 
 it('renders without crashing', () => {
@@ -125,15 +139,24 @@ it('displays Select Season heading', () => {
   expect(screen.getByRole('heading', { name: /Select Season/i })).toBeInTheDocument();
 });
 
-it('renders Website button per team and opens team website on click', async () => {
-  const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+it('team name opens team detail sheet; Visit website opens team site', async () => {
+  const fakeWindow = { location: { href: '' }, close: jest.fn() };
+  const openSpy = jest.spyOn(window, 'open').mockImplementation(() => fakeWindow);
   render(<App />);
-  const websiteButtons = screen.getAllByRole('button', { name: /Website/i });
-  expect(websiteButtons.length).toBeGreaterThanOrEqual(1);
-  await userEvent.click(websiteButtons[0]);
+  const teamNameButton = screen.getByRole('button', { name: /Visit Team A website/i });
+  await userEvent.click(teamNameButton);
   expect(fetchTeam).toHaveBeenCalledWith(1);
   await waitFor(() => {
-    expect(openSpy).toHaveBeenCalledWith('https://teama.example.com', '_blank', 'noopener,noreferrer');
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    const inDialog = within(dialog);
+    expect(inDialog.getByRole('heading', { name: 'Team A' })).toBeInTheDocument();
+    expect(inDialog.getByText('Team A Stadium')).toBeInTheDocument();
+    expect(inDialog.getByText('Coach Smith')).toBeInTheDocument();
   });
+  const visitWebsiteBtn = screen.getByRole('button', { name: /Visit website/i });
+  await userEvent.click(visitWebsiteBtn);
+  expect(openSpy).toHaveBeenCalledWith('', '_blank', 'noopener,noreferrer');
+  expect(fakeWindow.location.href).toBe('https://teama.example.com');
   openSpy.mockRestore();
 });

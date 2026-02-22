@@ -47,10 +47,20 @@ export interface ButtonProps {
   animationDelay?: number;
 }
 
+export interface SquadPlayer {
+  name: string;
+  position: string;
+  shirtNumber: number;
+}
+
 export interface TeamInfo {
   id: number;
   name: string;
+  crest: string | null;
   website: string | null;
+  venue: string | null;
+  coach: { name: string } | null;
+  squad: SquadPlayer[];
 }
 
 export interface RowProps {
@@ -87,15 +97,6 @@ export interface ThemeToggleProps {
   onToggle: () => void;
 }
 
-// App State Types
 export interface League {
   [key: string]: string;
-}
-
-export interface AppState {
-  leagueName: string;
-  rows: React.ReactElement[];
-  leagueId: string;
-  leagues: League;
-  buttons: React.ReactElement[];
 }

@@ -62,13 +62,28 @@ exports.handler = async (event) => {
       };
     }
 
+    const squad = Array.isArray(data.squad)
+      ? data.squad.map((p) => ({
+          name: p.name || '',
+          position: p.position || '',
+          shirtNumber: p.shirtNumber != null ? p.shirtNumber : 0,
+        }))
+      : [];
+    const coach = data.coach && data.coach.name
+      ? { name: data.coach.name }
+      : null;
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: data.id,
         name: data.name,
+        crest: data.crest || null,
         website: data.website || null,
+        venue: data.venue || null,
+        coach,
+        squad,
       }),
     };
   } catch (err) {

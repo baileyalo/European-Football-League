@@ -3,7 +3,7 @@ import { TableBodyProps } from '../types';
 
 const TableBody: React.FC<TableBodyProps> = React.memo(({ children }) => {
     return (
-        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <div className="standings-table-wrap" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
             <table className="standings-table">
                 <thead>
                     <tr>

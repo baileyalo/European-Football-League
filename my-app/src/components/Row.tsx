@@ -30,15 +30,14 @@ const Row: React.FC<RowProps> = React.memo(({
                 <div className="team-crest">
                     <img src={crest} alt={`${teamName} crest`} />
                 </div>
-                <span className="team-name-text">{teamName}</span>
                 <button
                     type="button"
-                    className="team-website-link"
+                    className="team-name-link"
                     onClick={() => onVisitWebsite(teamId)}
                     title={`Visit ${teamName} website`}
                     aria-label={`Visit ${teamName} website`}
                 >
-                    Website
+                    {teamName}
                 </button>
             </td>
             <td className="cell-center">{playedGames}</td>

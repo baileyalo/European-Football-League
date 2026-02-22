@@ -49,6 +49,8 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* App layout */
@@ -97,6 +99,7 @@ body {
 
 .season-button {
   padding: 0.5rem 1rem;
+  min-height: 2.75rem; /* 44px min touch target */
   background-color: var(--color-border-subtle);
   color: var(--color-text);
   border: none;
@@ -105,11 +108,17 @@ body {
   font-size: 0.875rem;
   font-weight: 500;
   transition: var(--transition-smooth);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .season-button:hover {
   background-color: var(--color-border);
   transform: translateY(-1px);
+}
+
+.season-button:active {
+  transform: translateY(0);
 }
 
 .season-button.active {
@@ -179,6 +188,7 @@ body {
 /* League buttons */
 .league-button {
   padding: 0.75rem 1.5rem;
+  min-height: 2.75rem; /* 44px min touch target */
   margin: 0 0.5rem 0.5rem 0;
   background-color: var(--color-primary);
   color: white;
@@ -186,6 +196,8 @@ body {
   border-radius: var(--radius-md);
   border: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   transition: var(--transition-smooth);
   box-shadow: var(--shadow-sm);
   animation: fadeIn 0.5s ease-out forwards;
@@ -230,6 +242,14 @@ body {
   50% {
     box-shadow: 0 4px 12px rgba(2, 132, 199, 0.5);
   }
+}
+
+/* Table wrapper: smooth horizontal scroll on mobile */
+.standings-table-wrap {
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 /* Table styles */
@@ -278,27 +298,33 @@ body {
   flex-wrap: wrap;
 }
 
-.team-name-text {
-  font-weight: 500;
-}
-
-.team-website-link {
-  margin-left: auto;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+.team-name-link {
+  font: inherit;
   font-weight: 500;
   color: var(--color-primary);
-  background: transparent;
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius-sm, 4px);
+  background: none;
+  border: none;
+  padding: 0.35rem 0.25rem 0.35rem 0;
+  min-height: 2.75rem; /* 44px touch target */
+  text-align: left;
   cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  text-decoration: none;
+  border-radius: var(--radius-sm, 4px);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-.team-website-link:hover {
-  color: var(--color-bg);
-  background: var(--color-primary);
-  border-color: var(--color-primary);
+.team-name-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.team-name-link:active {
+  opacity: 0.9;
+}
+.team-name-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .cell-center {
@@ -357,6 +383,8 @@ body {
   max-width: 80rem;
   margin: 0 auto;
   padding: 2rem 1rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
 }
 
 .header {
@@ -369,7 +397,7 @@ body {
 .header-content {
   max-width: 80rem;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 max(1rem, env(safe-area-inset-left)) 0 max(1rem, env(safe-area-inset-right));
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -461,6 +489,7 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
 }
 
 .error-message {
@@ -471,16 +500,25 @@ body {
 
 .retry-button {
   padding: 0.5rem 1rem;
+  min-height: 2.75rem; /* 44px touch target */
+  min-width: 8rem;
   background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: var(--transition-smooth);
+  font-size: 1rem;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .retry-button:hover {
   background-color: var(--color-primary-hover);
+}
+
+.retry-button:active {
+  opacity: 0.95;
 }
 
 .retry-button:focus-visible {
@@ -491,10 +529,12 @@ body {
 /* Theme toggle button */
 .theme-toggle-button {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
   width: 3rem;
   height: 3rem;
+  min-width: 2.75rem; /* 44px touch target on mobile */
+  min-height: 2.75rem;
   background-color: var(--color-primary);
   color: white;
   border: none;
@@ -507,6 +547,8 @@ body {
   box-shadow: var(--shadow-md);
   z-index: 1000;
   animation: bounceIn 0.8s ease-out 0.5s both;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .theme-toggle-button:hover {
@@ -666,17 +708,19 @@ body {
   
   /* Season selector mobile improvements */
   .season-button {
-    padding: 0.375rem 0.75rem !important;
-    font-size: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
     min-width: 60px;
+    min-height: 2.75rem; /* 44px touch target */
   }
   
   /* League buttons mobile layout */
   .league-button {
     padding: 0.5rem 0.75rem;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     margin: 0.25rem;
     flex: 1;
+    min-height: 2.75rem;
     min-width: calc(50% - 0.5rem);
     max-width: calc(50% - 0.5rem);
   }
@@ -688,46 +732,74 @@ body {
     padding: 0.5rem;
   }
   
-  /* Table mobile improvements */
+  /* Table mobile: scroll container and readable cells */
+  .standings-table-wrap {
+    margin: 0 -0.5rem; /* extend to container edge for full-width scroll */
+    padding: 0 0.5rem;
+    border-radius: var(--radius-md);
+  }
+  
   .standings-table {
-    font-size: 0.7rem;
-    overflow-x: auto;
-    display: block;
-    white-space: nowrap;
+    font-size: 0.8125rem; /* slightly larger for readability */
+    display: table;
+    width: max-content;
+    min-width: 100%;
   }
   
   .standings-table th,
   .standings-table td {
-    padding: 0.375rem 0.25rem;
-    min-width: 50px;
+    padding: 0.5rem 0.375rem;
+    min-width: 2.5rem;
   }
   
-  .standings-table th:first-child,
+  .standings-table th:first-child {
+    min-width: 2rem;
+    position: sticky;
+    left: 0;
+    background: var(--color-bg);
+    z-index: 2;
+    box-shadow: 2px 0 4px -2px rgba(0,0,0,0.08);
+  }
   .standings-table td:first-child {
-    min-width: 30px;
+    min-width: 2rem;
+    position: sticky;
+    left: 0;
+    background: var(--color-bg-elevated);
+    z-index: 1;
+    box-shadow: 2px 0 4px -2px rgba(0,0,0,0.06);
+  }
+  .standings-table tr:hover td:first-child {
+    background: var(--color-bg);
   }
   
   .standings-table th:nth-child(2),
   .standings-table td:nth-child(2) {
-    min-width: 120px;
+    min-width: 7rem; /* team name column */
   }
   
-  /* Team crest mobile sizing */
+  /* Team crest and name mobile */
   .team-crest {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
   
   .team-name {
     gap: 0.5rem;
   }
   
-  /* Theme toggle mobile */
+  .team-name-link {
+    min-height: 2.25rem;
+    padding: 0.3rem 0.25rem 0.3rem 0;
+  }
+  
+  /* Theme toggle: 44px touch target, safe area */
   .theme-toggle-button {
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
+    top: max(0.5rem, env(safe-area-inset-top));
+    right: max(0.5rem, env(safe-area-inset-right));
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
   }
   
   /* Footer mobile */
@@ -756,7 +828,13 @@ body {
 /* Extra small screens */
 @media (max-width: 480px) {
   .container {
-    padding: 0.25rem;
+    padding: 0.5rem;
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+  
+  .hero {
+    margin-bottom: 1.25rem;
   }
   
   h1 {
@@ -764,32 +842,38 @@ body {
   }
   
   .league-button {
-    font-size: 0.7rem;
-    padding: 0.375rem 0.5rem;
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.5rem;
+    min-height: 2.75rem;
     min-width: calc(50% - 0.25rem);
     max-width: calc(50% - 0.25rem);
   }
   
   .season-button {
-    padding: 0.25rem 0.5rem !important;
-    font-size: 0.7rem !important;
+    padding: 0.5rem 0.5rem !important;
+    font-size: 0.8125rem !important;
+    min-height: 2.75rem;
   }
   
   .standings-table {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
   }
   
   .standings-table th,
   .standings-table td {
-    padding: 0.25rem 0.125rem;
+    padding: 0.375rem 0.25rem;
   }
   
   .team-crest {
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
   
-  /* Mobile-specific animations */
+  .content {
+    margin-top: 1.25rem;
+  }
+  
+  /* Mobile-specific animations (shorter) */
   .fade-in {
     animation-duration: 0.4s;
   }
@@ -811,7 +895,7 @@ body {
 /* Mobile landscape orientation */
 @media (max-width: 768px) and (orientation: landscape) {
   .container {
-    padding: 0.25rem;
+    padding: 0.5rem;
   }
   
   h1 {
@@ -820,16 +904,231 @@ body {
   }
   
   .league-button {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.7rem;
+    padding: 0.5rem 0.5rem;
+    font-size: 0.8125rem;
+    min-height: 2.75rem;
   }
   
   .standings-table {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
   }
   
   .standings-table th,
   .standings-table td {
-    padding: 0.25rem 0.125rem;
+    padding: 0.375rem 0.25rem;
+  }
+}
+
+/* Team detail sheet (mobile-first: bottom sheet; desktop: centered modal) */
+.team-detail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.team-detail-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.team-detail-sheet {
+  position: relative;
+  width: 100%;
+  max-height: 85vh;
+  max-height: 85dvh;
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.team-detail-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+}
+.team-detail-header {
+  padding: 1.25rem 1rem 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+.team-detail-crest {
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.team-detail-crest img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.team-detail-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+.team-detail-meta {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.team-detail-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+.team-detail-label {
+  color: var(--color-text-muted);
+  font-weight: 500;
+  min-width: 3.5rem;
+}
+.team-detail-value {
+  color: var(--color-text);
+}
+.team-detail-squad {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border-subtle);
+}
+.team-detail-squad-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding: 0.5rem 1rem;
+}
+.team-detail-squad-scroll {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 1rem 1rem;
+  max-height: 12rem;
+}
+.team-detail-squad-group {
+  margin-bottom: 0.75rem;
+}
+.team-detail-squad-group:last-child {
+  margin-bottom: 0;
+}
+.team-detail-squad-position {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+.team-detail-squad-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.team-detail-squad-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  padding: 0.2rem 0;
+  color: var(--color-text);
+}
+.team-detail-squad-number {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 2rem;
+}
+.team-detail-squad-name {
+  flex: 1;
+}
+.team-detail-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-elevated);
+}
+.team-detail-website-btn {
+  flex: 1;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.team-detail-website-btn:hover {
+  background: var(--color-primary-hover);
+}
+.team-detail-close-btn {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-border-subtle);
+  color: var(--color-text);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.team-detail-close-btn:hover {
+  background: var(--color-border);
+}
+
+@media (min-width: 600px) {
+  .team-detail-overlay {
+    align-items: center;
+    padding: 1rem;
+  }
+  .team-detail-sheet {
+    width: 100%;
+    max-width: 22rem;
+    max-height: 90vh;
+    max-height: 90dvh;
+    border-radius: var(--radius-lg);
+  }
+  .team-detail-squad-scroll {
+    max-height: 16rem;
+  }
+}
+
+/* Respect reduced motion preference (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .theme-toggle-button {
+    animation: none;
+  }
+  
+  .league-button,
+  .season-button {
+    transition: none;
   }
 }
