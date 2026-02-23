@@ -68,5 +68,5 @@ See the root **README.md** → **Testing** for full test documentation (setup, t
 - **Environment Variables:** Secure API configuration
 - **Production Build:** Optimized and minified
 - **Tests:** Jest + React Testing Library; 11 App tests (see README)
-- **Team detail:** `netlify/functions/team.js` fetches team data (stadium, coach, squad, website). `netlify/functions/scorers.js` fetches top scorers per league/season so each team’s top scorer can be shown in the detail sheet.
+- **Team detail:** `netlify/functions/team.js` fetches team data (stadium, coach, squad, website). `netlify/functions/scorers.js` fetches top scorers per league/season for the “top scorer” line. Team detail is a centered modal (smaller on mobile), with Escape to close and body scroll locked when open.
 

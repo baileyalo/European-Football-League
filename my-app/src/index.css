@@ -919,33 +919,49 @@ body {
   }
 }
 
-/* Team detail sheet (mobile-first: bottom sheet; desktop: centered modal) */
+/* Team detail sheet (mobile: small centered card; desktop: centered modal) */
 .team-detail-overlay {
   position: fixed;
   inset: 0;
   z-index: 2000;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding: 0;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding: 1rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  padding-top: max(1rem, env(safe-area-inset-top));
 }
 .team-detail-backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s ease;
 }
 .team-detail-sheet {
   position: relative;
   width: 100%;
-  max-height: 85vh;
-  max-height: 85dvh;
+  max-width: min(22rem, calc(100% - 2rem));
+  max-height: 72vh;
+  max-height: 72dvh;
   background: var(--color-bg-elevated);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  animation: teamDetailSlideIn 0.25s ease-out;
+}
+@keyframes teamDetailSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .team-detail-loading {
   display: flex;
@@ -953,6 +969,7 @@ body {
   justify-content: center;
   gap: 0.75rem;
   padding: 2rem;
+  min-height: 8rem;
 }
 .team-detail-header {
   padding: 1.25rem 1rem 0.75rem;
@@ -1079,6 +1096,18 @@ body {
 .team-detail-website-btn:hover {
   background: var(--color-primary-hover);
 }
+.team-detail-website-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.team-detail-no-website {
+  flex: 1;
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+}
 .team-detail-close-btn {
   min-height: 2.75rem;
   padding: 0.5rem 1rem;
@@ -1094,6 +1123,10 @@ body {
 }
 .team-detail-close-btn:hover {
   background: var(--color-border);
+}
+.team-detail-close-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 @media (min-width: 600px) {

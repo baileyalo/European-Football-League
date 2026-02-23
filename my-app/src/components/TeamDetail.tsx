@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import type { TeamInfo, SquadPlayer } from '../types';
 
 const POSITION_ORDER: Record<string, number> = {
@@ -47,13 +47,32 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
     () => (team?.squad?.length ? groupSquad(team.squad) : []),
     [team?.squad]
   );
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!team && !loading) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [team, loading, onClose]);
+
+  useEffect(() => {
+    if (loading) {
+      sheetRef.current?.focus();
+    } else if (team) {
+      closeButtonRef.current?.focus();
+    }
+  }, [loading, team]);
 
   if (!team && !loading) return null;
 
   return (
     <div className="team-detail-overlay" role="dialog" aria-modal="true" aria-labelledby="team-detail-title">
       <div className="team-detail-backdrop" onClick={onClose} aria-hidden />
-      <div className="team-detail-sheet">
+      <div className="team-detail-sheet" ref={sheetRef} tabIndex={-1}>
         {loading ? (
           <div className="team-detail-loading">
             <div className="loading-spinner" aria-hidden />
@@ -113,7 +132,7 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
             )}
 
             <div className="team-detail-actions">
-              {team.website && (
+              {team.website ? (
                 <button
                   type="button"
                   className="team-detail-website-btn"
@@ -121,11 +140,14 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
                 >
                   Visit website
                 </button>
+              ) : (
+                <p className="team-detail-no-website">No website available</p>
               )}
               <button
                 type="button"
                 className="team-detail-close-btn"
                 onClick={onClose}
+                ref={closeButtonRef}
               >
                 Close
               </button>

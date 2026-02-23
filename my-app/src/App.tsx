@@ -48,6 +48,15 @@ const App: React.FC = () => {
     window.open(url, '_blank', 'noopener,noreferrer');
   }, []);
 
+  // Lock body scroll when team detail is open
+  React.useEffect(() => {
+    const open = selectedTeam !== null || teamDetailLoading;
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedTeam, teamDetailLoading]);
+
   // Load scorers for current league/season when team detail is open (for top scorer)
   React.useEffect(() => {
     if (!selectedTeam || !leagueId || !season) return;
