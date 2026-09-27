@@ -26,7 +26,7 @@
 }
 
 [data-theme="dark"] {
-  --color-bg: #f59e0b;
+  --color-bg: #1f2937;
   --color-bg-elevated: #1f2937;
   --color-text: #f9fafb;
   --color-text-muted: #d1d5db;
@@ -579,10 +579,10 @@ body {
 }
 
 [data-theme="dark"] .league-button.active {
-  background-color: var(--color-accent);
+  background-color: #1f2937;
   color:#d97706;
   box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
-  border: 2px solid var(--color-accent);
+  border: 2px solid #1f2937;
   font-weight: 600;
   animation: activePulseDark 2s ease-in-out infinite;
 }
