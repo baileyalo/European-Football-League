@@ -16,7 +16,7 @@ import { LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
 const App: React.FC = () => {
   const [leagueId, setLeagueId] = React.useState('PL');
-  const [season, setSeason] = React.useState(process.env.REACT_APP_CURRENT_SEASON || '2024');
+  const [season, setSeason] = React.useState(process.env.REACT_APP_CURRENT_SEASON || '2026');
   const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
   const [teamDetailLoading, setTeamDetailLoading] = useState(false);
   const [scorersCache, setScorersCache] = useState<Record<string, ScorerEntry[]>>({});
