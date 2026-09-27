@@ -579,8 +579,8 @@ body {
 }
 
 [data-theme="dark"] .league-button.active {
-  background-color: #1f2937;
-  color:#d97706;
+  background-color:var(--color-accent);
+  color:var(--color-text);
   box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
   border: 2px solid #1f2937;
   font-weight: 600;
