@@ -580,7 +580,7 @@ body {
 
 [data-theme="dark"] .league-button.active {
   background-color: var(--color-accent);
-  color: #111827;
+  color:#d97706;
   box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
   border: 2px solid var(--color-accent);
   font-weight: 600;
