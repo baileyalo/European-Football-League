@@ -5,7 +5,7 @@ const Footer: React.FC = React.memo(() => {
   return (
     <footer className="footer fade-in animate-delay-4">
       <div className="footer-content">
-        <p>&copy; {year} ABTekz All rights reserved</p>
+        <p>&copy;{year} ABTekz All rights reserved</p>
       </div>
     </footer>
   );
