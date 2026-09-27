@@ -9,4 +9,4 @@ export const LEAGUES: League = {
   'Serie A': 'SA',
 } as const;
 
-export const SEASON_OPTIONS = ['2024', '2025'] as const;
+export const SEASON_OPTIONS = ['2024', '2025', '2026'] as const;

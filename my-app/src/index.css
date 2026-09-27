@@ -573,6 +573,8 @@ body {
 }
 
 [data-theme="dark"] .theme-toggle-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
   background-color: #d97706;
 }
 
