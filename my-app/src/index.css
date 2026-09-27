@@ -579,29 +579,31 @@ body {
 }
 
 [data-theme="dark"] .league-button.active {
-  background-color:var(--color-accent);
-  color:var(--color-text);
-  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
-  border: 2px solid #1f2937;
+  background-color: var(--color-accent);
+  color: #111827;
+  border: 2px solid #fbbf24;
   font-weight: 600;
-  animation: activePulseDark 2s ease-in-out infinite;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+  animation: activePulseDark 2s ease-in-out infinite;
+}
+
+[data-theme="dark"] .league-button.active:hover {
+  background-color: #d97706;
+  color: #111827;
+  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4);
 }
 
 @keyframes activePulseDark {
   0%, 100% {
     box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
   }
+
   50% {
     box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
   }
 }
 
-[data-theme="dark"] .league-button.active:hover {
-  background-color: var(--color-accent);
-  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4);
-}
 
 /* Animation classes */
 .fade-in {
