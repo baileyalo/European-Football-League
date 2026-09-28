@@ -580,19 +580,21 @@ body {
 
 /* Dark mode selected league */
 [data-theme="dark"] .league-button.active {
-  background-color: #f59e0b;
-  color: #111827;
-  border: 2px solid #fbbf24;
-  font-weight: 700;
+  background-color: #f59e0b !important;
+  color: #111827 !important;
+  border: 2px solid #fbbf24 !important;
+  font-weight: 700 !important;
+  opacity: 1 !important;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
   animation: activePulseDark 2s ease-in-out infinite;
 }
 
 [data-theme="dark"] .league-button.active:hover {
-  background-color: #d97706;
-  color: #111827;
-  border-color: #fbbf24;
+  background-color: #d97706 !important;
+  color: #111827 !important;
+  border-color: #fbbf24 !important;
+  opacity: 1 !important;
   box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4);
 }
 
