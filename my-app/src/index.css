@@ -578,11 +578,12 @@ body {
   background-color: #d97706;
 }
 
+/* Dark mode selected league */
 [data-theme="dark"] .league-button.active {
-  background-color: var(--color-accent);
-  color:  #d97706;
+  background-color: #f59e0b;
+  color: #111827;
   border: 2px solid #fbbf24;
-  font-weight: 600;
+  font-weight: 700;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
   animation: activePulseDark 2s ease-in-out infinite;
@@ -591,6 +592,7 @@ body {
 [data-theme="dark"] .league-button.active:hover {
   background-color: #d97706;
   color: #111827;
+  border-color: #fbbf24;
   box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4);
 }
 

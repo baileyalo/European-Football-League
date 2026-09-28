@@ -5,9 +5,9 @@ A React app that shows live standings for top European football leagues (Premier
 ## Features
 
 - **Live standings** – View tables for multiple leagues and seasons
-- **Visit team website** – Click “Website” next to a team to open their official site (fetched from Football Data API)
+- **Team details** – Tap a team name to open a centered sheet with stadium, coach, top scorer (for current league/season), squad list, and a “Visit website” link (data from Football Data API). Escape to close; body scroll locked while open; shows “No website available” when a team has no URL.
 - **Dark / light theme** – Toggle with system preference support and persistence
-- **Responsive layout** – Works on mobile and desktop
+- **Responsive layout** – Works on mobile and desktop (team detail is a small centered card on mobile)
 - **Performance** – Memoized components, data-driven rendering, CSS variables for theming
 
 ## Prerequisites
@@ -58,7 +58,7 @@ A React app that shows live standings for top European football leagues (Premier
 ```
 src/
 ├── api/
-│   └── footballApi.ts     # fetchStandings(), fetchTeam() (via Netlify functions)
+│   └── footballApi.ts     # fetchStandings(), fetchTeam(), fetchScorers() (via Netlify functions)
 ├── constants/
 │   └── leagues.ts        # LEAGUES map, SEASON_OPTIONS
 ├── hooks/
@@ -69,8 +69,9 @@ src/
 │   ├── Footer.tsx
 │   ├── Header.tsx
 │   ├── LeagueInfo.tsx    # League logo & title
-│   ├── Row.tsx           # Standings table row (with Website button)
+│   ├── Row.tsx           # Standings table row (team name opens detail)
 │   ├── TableBody.tsx     # Standings table wrapper
+│   ├── TeamDetail.tsx    # Team detail modal (stadium, coach, top scorer, squad, website; Escape to close)
 │   └── ThemeToggle.tsx
 ├── types/
 │   └── index.ts          # API & component types
@@ -83,7 +84,7 @@ src/
 
 ## Testing
 
-Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@testing-library/user-event`). The `useTheme` and `useStandings` hooks and the `footballApi` module (`fetchStandings`, `fetchTeam`) are mocked so the app is tested without hitting the real API.
+Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@testing-library/user-event`). The `useTheme` and `useStandings` hooks and the `footballApi` module (`fetchStandings`, `fetchTeam`, `fetchScorers`) are mocked so the app is tested without hitting the real API.
 
 - **Setup:** `src/setupTests.js` imports `@testing-library/jest-dom` so matchers like `toBeInTheDocument()` and `toHaveTextContent()` are available.
 - **Run tests:** From `my-app`, run `npm test` (watch mode) or `npm test -- --watchAll=false` for a single run (e.g. in CI).
@@ -101,7 +102,8 @@ Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@te
 | Renders season selection buttons | 2024 and 2025 season buttons are present. |
 | Calls useStandings with initial league and season | Hook is invoked with default league id `'PL'` and current season string. |
 | Displays Select Season heading | "Select Season" heading is rendered. |
-| Website button per team and opens team website on click | Each team row has a "Website" button; clicking it calls `fetchTeam(teamId)` and opens the team website in a new tab (mocked in test). |
+| Team name opens detail sheet; Visit website opens team site | Tapping a team name fetches team data and opens a detail sheet (stadium, coach, squad); "Visit website" opens the team site in a new tab (mocked). |
+| Top scorer in team detail | When the scorers API returns data for the current league/season, the team’s top scorer (name and goals) is shown in the detail sheet. |
 
 ## Tech stack
 
@@ -114,12 +116,13 @@ Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@te
 
 1. Build with `npm run build`; Netlify will run this and publish the `build/` folder.
 2. **Set environment variables in the Netlify dashboard** (Site → Environment variables):
-   - `FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token (required for standings).
+   - `FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token (required for standings, team detail, and top scorers).
    - `FOOTBALL_API_URL` – Optional; default is `https://api.football-data.org/v4`.
 
 The app uses **Netlify serverless functions** to call the Football Data API:
 - `netlify/functions/standings.js` – standings by league and season
-- `netlify/functions/team.js` – team details (e.g. website) by team ID
+- `netlify/functions/team.js` – team details (stadium, coach, squad, website) by team ID
+- `netlify/functions/scorers.js` – top scorers for a league/season (used for “top scorer” in team detail)
 
 The token is only used on the server, so CORS and “Failed to fetch” from the browser are avoided. See `DEPLOYMENT.md` and `netlify.toml` for more.
 
