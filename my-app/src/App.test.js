@@ -143,7 +143,7 @@ it('renders season selection buttons', () => {
 
 it('calls useStandings with initial league and season', () => {
   render(<App />);
-  expect(useStandings).toHaveBeenCalledWith('PL', expect.any(String));
+  expect(useStandings).toHaveBeenCalledWith('PL', '2026');
 });
 
 it('displays Select Season heading', () => {

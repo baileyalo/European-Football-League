@@ -11,6 +11,8 @@ export const LEAGUES: League = {
 
 export const SEASON_OPTIONS = ['2024', '2025', '2026'] as const;
 
+export const DEFAULT_SEASON: (typeof SEASON_OPTIONS)[number] = '2026';
+
 /** Logos keyed by the competition name returned by the Football Data API. */
 export const LEAGUE_LOGOS: Record<string, string> = {
   Bundesliga: '/Bundesliga.png',

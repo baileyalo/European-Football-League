@@ -1,6 +1,6 @@
 /**
  * Netlify serverless function: fetch top scorers for a competition from Football Data API.
- * GET ?leagueId=PL&season=2024
+ * GET ?leagueId=PL&season=2026
  */
 exports.handler = async (event) => {
   const token =

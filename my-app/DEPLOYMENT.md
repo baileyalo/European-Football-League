@@ -20,7 +20,7 @@ Add these in Site Settings > Environment Variables:
 
 **Optional (app display):**
 - `REACT_APP_APP_NAME` – e.g. European Football League
-- `REACT_APP_CURRENT_SEASON` – starting season, one of `2024`, `2025`, or `2026` (default `2026`)
+- The app opens on the 2026 season. 2024 and 2025 stay available in the season picker.
 
 ### 📋 Deployment Steps:
 

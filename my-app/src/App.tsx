@@ -12,12 +12,12 @@ import { useTheme } from './hooks/useTheme';
 import { useStandings } from './hooks/useStandings';
 import { fetchTeam, fetchScorers } from './api/footballApi';
 import type { ScorerEntry, TeamInfo } from './types';
-import { LEAGUES, SEASON_OPTIONS } from './constants/leagues';
+import { DEFAULT_SEASON, LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
 
 const App: React.FC = () => {
   const [leagueId, setLeagueId] = React.useState('PL');
-  const [season, setSeason] = React.useState(process.env.REACT_APP_CURRENT_SEASON || '2026');
+  const [season, setSeason] = React.useState(DEFAULT_SEASON);
   const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
   const [teamDetailLoading, setTeamDetailLoading] = useState(false);
   const [teamDetailError, setTeamDetailError] = useState<string | null>(null);
@@ -151,6 +151,7 @@ const App: React.FC = () => {
                   type="button"
                   onClick={() => setSeason(year)}
                   className={`season-button ${season === year ? 'active' : ''}`}
+                  aria-pressed={season === year}
                 >
                   {year}
                 </button>
