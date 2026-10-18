@@ -2,29 +2,34 @@
 
 ## 🚀 Deployment Setup Complete!
 
-Your European Football League app is now ready for Netlify deployment.
+Your Football Standings app is now ready for Netlify deployment.
 
 ### 🔧 Netlify Settings:
 
 #### **Build Settings:**
+
 - **Build Command:** `npm run build`
 - **Publish Directory:** `build`
 - **Node Version:** `18.x` (recommended)
 
 #### **Environment Variables (in Netlify Dashboard):**
+
 Add these in Site Settings > Environment Variables:
 
 **Required for Netlify functions (standings, team detail, top scorers):**
+
 - `FOOTBALL_API_TOKEN` – Your [Football Data API](https://www.football-data.org/) token
 - `FOOTBALL_API_URL` – Optional; default is `https://api.football-data.org/v4`
 
 **Optional (app display):**
-- `REACT_APP_APP_NAME` – e.g. European Football League
+
+- `REACT_APP_APP_NAME` – e.g. Football Standings
 - The app opens on the 2026 season. 2024 and 2025 stay available in the season picker.
 
 ### 📋 Deployment Steps:
 
 1. **Push to GitHub:**
+
    ```bash
    git add .
    git commit -m "deployment"
@@ -67,7 +72,6 @@ See the root **README.md** → **Testing** for full test documentation (setup, t
 - **Caching:** Optimized cache headers for static assets
 - **Environment Variables:** Secure API configuration
 - **Production Build:** Optimized and minified
-- **Tests:** Jest + React Testing Library; 11 App tests (see README)
+- **Tests:** Jest + React Testing Library; 17 App tests (see README)
 - **Team detail:** `netlify/functions/team.js` fetches team data (stadium, coach, squad, website). `netlify/functions/scorers.js` fetches top scorers per league/season for the “top scorer” line. The sheet is a centered modal (smaller on mobile). Escape closes it, page scroll is locked while it is open, and a failed team request is shown in the sheet.
 - **Standings key:** Position colors mark Champions League, Europa League, and relegation places. Seasons available in the app are 2024, 2025, and 2026.
-

@@ -63,14 +63,12 @@ beforeEach(() => {
     },
     error: null,
   });
-  fetchScorers.mockResolvedValue({ data: [], error: null });
+  fetchScorers.mockImplementation(() => new Promise(() => {}));
 });
 
 function mockScorersWithTopScorer() {
   fetchScorers.mockResolvedValue({
-    data: [
-      { player: { name: 'Star Striker' }, team: { id: 1 }, goals: 14 },
-    ],
+    data: [{ player: { name: 'Star Striker' }, team: { id: 1 }, goals: 14 }],
     error: null,
   });
 }
@@ -88,8 +86,10 @@ it('renders without crashing', () => {
 
 it('displays main title and subtitle', () => {
   render(<App />);
-  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Standings/);
-  expect(screen.getByText(/Live standings from top European leagues/)).toBeInTheDocument();
+  expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+    process.env.REACT_APP_APP_NAME || 'Football Standings'
+  );
+  expect(screen.getByText(/Live football standings/)).toBeInTheDocument();
 });
 
 it('shows loading state when isLoading is true', () => {
@@ -167,7 +167,11 @@ it('team name opens team detail sheet; Visit website opens team site', async () 
   });
   const visitWebsiteBtn = screen.getByRole('button', { name: /Visit website/i });
   await userEvent.click(visitWebsiteBtn);
-  expect(openSpy).toHaveBeenCalledWith('https://teama.example.com', '_blank', 'noopener,noreferrer');
+  expect(openSpy).toHaveBeenCalledWith(
+    'https://teama.example.com',
+    '_blank',
+    'noopener,noreferrer'
+  );
   openSpy.mockRestore();
 });
 
@@ -180,5 +184,82 @@ it('shows top scorer in team detail when scorers API returns data for that team'
     const dialog = screen.getByRole('dialog');
     expect(within(dialog).getByText(/Star Striker/)).toBeInTheDocument();
     expect(within(dialog).getByText(/14 goals/)).toBeInTheDocument();
+  });
+});
+
+it('loads the selected league and season', async () => {
+  render(<App />);
+  expect(screen.getByRole('button', { name: '2026' })).toHaveAttribute('aria-pressed', 'true');
+
+  await userEvent.click(screen.getByRole('button', { name: 'La Liga' }));
+  expect(useStandings).toHaveBeenLastCalledWith('PD', '2026');
+
+  await userEvent.click(screen.getByRole('button', { name: '2024' }));
+  expect(useStandings).toHaveBeenLastCalledWith('PD', '2024');
+});
+
+it('shows position, matches played, and points for each team', () => {
+  render(<App />);
+  const row = screen.getByRole('row', { name: /Team A/i });
+  const cells = within(row).getAllByRole('cell');
+  expect(cells[0]).toHaveTextContent('1');
+  expect(cells[2]).toHaveTextContent('10');
+  expect(cells[9]).toHaveTextContent('25');
+});
+
+it('shows an empty standings message when the table has no rows', () => {
+  useStandings.mockReturnValue({
+    leagueName: 'Premier League',
+    standings: [],
+    isLoading: false,
+    error: null,
+    retry: mockRetry,
+  });
+  render(<App />);
+  expect(screen.getByText(/No standings for this league and season/)).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: /View details/i })).not.toBeInTheDocument();
+});
+
+it('shows a team load failure in the detail sheet', async () => {
+  const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+  fetchTeam.mockResolvedValue({ data: null, error: 'Team unavailable' });
+  render(<App />);
+  await userEvent.click(screen.getByRole('button', { name: /View details for Team A/i }));
+  const dialog = await screen.findByRole('dialog', { name: /Couldn’t load team/i });
+  expect(within(dialog).getByText(/Team unavailable/)).toBeInTheDocument();
+  expect(openSpy).not.toHaveBeenCalled();
+  openSpy.mockRestore();
+});
+
+it('shows that a team has no website instead of opening a tab', async () => {
+  const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+  fetchTeam.mockResolvedValue({
+    data: {
+      id: 1,
+      name: 'Team A',
+      crest: null,
+      website: null,
+      venue: null,
+      coach: null,
+      squad: [],
+    },
+    error: null,
+  });
+  render(<App />);
+  await userEvent.click(screen.getByRole('button', { name: /View details for Team A/i }));
+  const dialog = await screen.findByRole('dialog', { name: 'Team A' });
+  expect(within(dialog).getByText(/No website available/)).toBeInTheDocument();
+  expect(within(dialog).queryByRole('button', { name: /Visit website/i })).not.toBeInTheDocument();
+  expect(openSpy).not.toHaveBeenCalled();
+  openSpy.mockRestore();
+});
+
+it('closes the team detail sheet when Escape is pressed', async () => {
+  render(<App />);
+  await userEvent.click(screen.getByRole('button', { name: /View details for Team A/i }));
+  expect(await screen.findByRole('dialog')).toBeInTheDocument();
+  await userEvent.keyboard('{Escape}');
+  await waitFor(() => {
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

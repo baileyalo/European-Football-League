@@ -90,10 +90,17 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
           </div>
         ) : error ? (
           <div className="team-detail-error">
-            <h2 id="team-detail-title" className="team-detail-title">Couldn’t load team</h2>
+            <h2 id="team-detail-title" className="team-detail-title">
+              Couldn’t load team
+            </h2>
             <p className="error-detail">{error}</p>
             <div className="team-detail-actions">
-              <button type="button" className="team-detail-close-btn" onClick={onClose} ref={closeButtonRef}>
+              <button
+                type="button"
+                className="team-detail-close-btn"
+                onClick={onClose}
+                ref={closeButtonRef}
+              >
                 Close
               </button>
             </div>
@@ -106,7 +113,9 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
                   <img src={team.crest} alt="" />
                 </div>
               )}
-              <h2 id="team-detail-title" className="team-detail-title">{team.name}</h2>
+              <h2 id="team-detail-title" className="team-detail-title">
+                {team.name}
+              </h2>
             </div>
 
             <div className="team-detail-meta">
@@ -125,7 +134,9 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
               {topScorer && (
                 <p className="team-detail-row">
                   <span className="team-detail-label">Top scorer</span>
-                  <span className="team-detail-value">{topScorer.name} ({topScorer.goals} goals)</span>
+                  <span className="team-detail-value">
+                    {topScorer.name} ({topScorer.goals} goals)
+                  </span>
                 </p>
               )}
             </div>
@@ -139,7 +150,10 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
                       <div className="team-detail-squad-position">{position}</div>
                       <ul className="team-detail-squad-list">
                         {players.map((player) => (
-                          <li key={`${player.name}-${player.shirtNumber}`} className="team-detail-squad-item">
+                          <li
+                            key={`${player.name}-${player.shirtNumber}`}
+                            className="team-detail-squad-item"
+                          >
                             <span className="team-detail-squad-number">#{player.shirtNumber}</span>
                             <span className="team-detail-squad-name">{player.name}</span>
                           </li>

@@ -14,7 +14,6 @@ import { fetchTeam, fetchScorers } from './api/footballApi';
 import type { ScorerEntry, TeamInfo } from './types';
 import { DEFAULT_SEASON, LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
-
 const App: React.FC = () => {
   const [leagueId, setLeagueId] = React.useState('PL');
   const [season, setSeason] = React.useState(DEFAULT_SEASON);
@@ -135,10 +134,8 @@ const App: React.FC = () => {
       <ThemeToggle isDarkMode={isDarkMode} onToggle={toggleTheme} />
       <div className="container">
         <div className="hero slide-in-left">
-          <h1 className="title">
-            {process.env.REACT_APP_APP_NAME || 'European Football League'} Standings
-          </h1>
-          <p className="subtitle">Live standings from top European leagues</p>
+          <h1 className="title">{process.env.REACT_APP_APP_NAME || 'Football Standings'}</h1>
+          <p className="subtitle">Live football standings</p>
         </div>
 
         <Header>
@@ -158,14 +155,17 @@ const App: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="scale-in animate-delay-2 league-buttons-wrap">
-            {leagueButtons}
-          </div>
+          <div className="scale-in animate-delay-2 league-buttons-wrap">{leagueButtons}</div>
         </Header>
 
         <div className="content">
           {isLoading ? (
-            <div className="loading-wrap bounce-in" role="status" aria-live="polite" aria-busy="true">
+            <div
+              className="loading-wrap bounce-in"
+              role="status"
+              aria-live="polite"
+              aria-busy="true"
+            >
               <div className="loading-spinner" aria-hidden />
               <span className="loading-text">Loading standings...</span>
             </div>
@@ -176,7 +176,9 @@ const App: React.FC = () => {
               {standings && standings.length > 0 ? (
                 <TableBody>{tableRows}</TableBody>
               ) : (
-                <p className="empty-standings" role="status">No standings for this league and season.</p>
+                <p className="empty-standings" role="status">
+                  No standings for this league and season.
+                </p>
               )}
             </div>
           )}

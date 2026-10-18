@@ -2,10 +2,13 @@
  * Netlify serverless function: fetch team by ID from Football Data API.
  * Returns team info including website (for "Visit website" link).
  */
+const { corsHeaders, preflight } = require('./cors');
+
 exports.handler = async (event) => {
-  const token =
-    process.env.FOOTBALL_API_TOKEN ||
-    process.env.REACT_APP_FOOTBALL_API_TOKEN;
+  const options = preflight(event);
+  if (options) return options;
+
+  const token = process.env.FOOTBALL_API_TOKEN || process.env.REACT_APP_FOOTBALL_API_TOKEN;
   const apiBase =
     process.env.FOOTBALL_API_URL ||
     process.env.REACT_APP_FOOTBALL_API_URL ||
@@ -14,7 +17,7 @@ exports.handler = async (event) => {
   if (!token) {
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({
         error:
           'Server: Set FOOTBALL_API_TOKEN in Netlify → Site configuration → Environment variables, then redeploy.',
@@ -27,7 +30,7 @@ exports.handler = async (event) => {
   if (!teamId) {
     return {
       statusCode: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({ error: 'Missing team id' }),
     };
   }
@@ -57,7 +60,7 @@ exports.handler = async (event) => {
               : data?.message || `HTTP ${res.status}`;
       return {
         statusCode: res.status,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
         body: JSON.stringify({ error: message }),
       };
     }
@@ -69,13 +72,11 @@ exports.handler = async (event) => {
           shirtNumber: p.shirtNumber != null ? p.shirtNumber : 0,
         }))
       : [];
-    const coach = data.coach && data.coach.name
-      ? { name: data.coach.name }
-      : null;
+    const coach = data.coach && data.coach.name ? { name: data.coach.name } : null;
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({
         id: data.id,
         name: data.name,
@@ -89,7 +90,7 @@ exports.handler = async (event) => {
   } catch (err) {
     return {
       statusCode: 502,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({
         error: err.message || 'Failed to fetch from Football Data API',
       }),

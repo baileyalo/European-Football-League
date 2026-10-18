@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "es2017"
-    ],
+    "lib": ["dom", "dom.iterable", "es2017"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,7 +17,5 @@
     "jsx": "react-jsx",
     "types": ["node"]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

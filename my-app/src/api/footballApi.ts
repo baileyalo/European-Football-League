@@ -2,7 +2,10 @@ import type { StandingsResponse, TeamInfo, ScorerEntry } from '../types';
 
 /** Base URL for standings API. Same origin on Netlify; set REACT_APP_STANDINGS_API_URL for local dev (e.g. your deployed site URL). */
 function getStandingsBaseUrl(): string {
-  if (typeof process.env.REACT_APP_STANDINGS_API_URL === 'string' && process.env.REACT_APP_STANDINGS_API_URL) {
+  if (
+    typeof process.env.REACT_APP_STANDINGS_API_URL === 'string' &&
+    process.env.REACT_APP_STANDINGS_API_URL
+  ) {
     return process.env.REACT_APP_STANDINGS_API_URL.replace(/\/$/, '');
   }
   return '';
@@ -25,7 +28,11 @@ export async function fetchStandings(
 
     if (!response.ok) {
       const message =
-        typeof body?.error === 'string' ? body.error : response.status === 500 ? 'Server configuration error' : `Request failed (${response.status})`;
+        typeof body?.error === 'string'
+          ? body.error
+          : response.status === 500
+            ? 'Server configuration error'
+            : `Request failed (${response.status})`;
       return { data: null, error: message };
     }
 
@@ -57,7 +64,11 @@ export async function fetchTeam(
 
     if (!response.ok) {
       const message =
-        typeof body?.error === 'string' ? body.error : response.status === 500 ? 'Server configuration error' : `Request failed (${response.status})`;
+        typeof body?.error === 'string'
+          ? body.error
+          : response.status === 500
+            ? 'Server configuration error'
+            : `Request failed (${response.status})`;
       return { data: null, error: message };
     }
 
@@ -90,7 +101,11 @@ export async function fetchScorers(
 
     if (!response.ok) {
       const message =
-        typeof body?.error === 'string' ? body.error : response.status === 500 ? 'Server configuration error' : `Request failed (${response.status})`;
+        typeof body?.error === 'string'
+          ? body.error
+          : response.status === 500
+            ? 'Server configuration error'
+            : `Request failed (${response.status})`;
       return { data: null, error: message };
     }
 

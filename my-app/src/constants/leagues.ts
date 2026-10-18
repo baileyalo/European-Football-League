@@ -3,9 +3,9 @@ import type { League } from '../types';
 export const LEAGUES: League = {
   'La Liga': 'PD',
   'Premier League': 'PL',
-  'Eredivisie': 'DED',
+  Eredivisie: 'DED',
   'Ligue 1': 'FL1',
-  'Bundesliga': 'BL1',
+  Bundesliga: 'BL1',
   'Serie A': 'SA',
 } as const;
 

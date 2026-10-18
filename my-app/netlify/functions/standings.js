@@ -2,10 +2,13 @@
  * Netlify serverless function: proxy to Football Data API.
  * Keeps X-Auth-Token on the server (set FOOTBALL_API_TOKEN in Netlify env).
  */
+const { corsHeaders, preflight } = require('./cors');
+
 exports.handler = async (event) => {
-  const token =
-    process.env.FOOTBALL_API_TOKEN ||
-    process.env.REACT_APP_FOOTBALL_API_TOKEN;
+  const options = preflight(event);
+  if (options) return options;
+
+  const token = process.env.FOOTBALL_API_TOKEN || process.env.REACT_APP_FOOTBALL_API_TOKEN;
   const apiBase =
     process.env.FOOTBALL_API_URL ||
     process.env.REACT_APP_FOOTBALL_API_URL ||
@@ -14,7 +17,7 @@ exports.handler = async (event) => {
   if (!token) {
     return {
       statusCode: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({
         error:
           'Server: Set FOOTBALL_API_TOKEN (or REACT_APP_FOOTBALL_API_TOKEN) in Netlify → Site configuration → Environment variables, then redeploy.',
@@ -28,7 +31,7 @@ exports.handler = async (event) => {
   if (!leagueId || !season) {
     return {
       statusCode: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({ error: 'Missing leagueId or season' }),
     };
   }
@@ -58,7 +61,7 @@ exports.handler = async (event) => {
               : data?.message || `HTTP ${res.status}`;
       return {
         statusCode: res.status,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
         body: JSON.stringify({ error: message }),
       };
     }
@@ -66,20 +69,20 @@ exports.handler = async (event) => {
     if (!data?.standings?.[0]?.table) {
       return {
         statusCode: 502,
-        headers: { 'Content-Type': 'application/json' },
+        headers: corsHeaders,
         body: JSON.stringify({ error: 'Invalid data from API' }),
       };
     }
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify(data),
     };
   } catch (err) {
     return {
       statusCode: 502,
-      headers: { 'Content-Type': 'application/json' },
+      headers: corsHeaders,
       body: JSON.stringify({
         error: err.message || 'Failed to fetch from Football Data API',
       }),

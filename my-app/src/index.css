@@ -25,7 +25,7 @@
   --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-bg: #1f2937;
   --color-bg-elevated: #1f2937;
   --color-text: #f9fafb;
@@ -43,8 +43,17 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
@@ -56,6 +65,7 @@ body {
 /* App layout */
 .app-root {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--color-bg);
 }
 
@@ -226,7 +236,9 @@ body {
   border: 2px solid var(--color-primary);
   font-weight: 600;
   position: relative;
-  animation: activePulse 2s ease-in-out infinite, fadeIn 0.5s ease-out forwards;
+  animation:
+    activePulse 2s ease-in-out infinite,
+    fadeIn 0.5s ease-out forwards;
 }
 
 .league-button.active:hover {
@@ -236,7 +248,8 @@ body {
 }
 
 @keyframes activePulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 4px 8px rgba(2, 132, 199, 0.3);
   }
   50% {
@@ -250,6 +263,7 @@ body {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   border-radius: var(--radius-lg);
 }
 
@@ -265,9 +279,15 @@ body {
   border: 0;
 }
 
-.col-pos { width: 3rem; }
-.col-team { min-width: 12rem; }
-.col-stat { width: 4rem; }
+.col-pos {
+  width: 3rem;
+}
+.col-team {
+  min-width: 12rem;
+}
+.col-stat {
+  width: 4rem;
+}
 
 .standings-legend {
   display: flex;
@@ -294,9 +314,15 @@ body {
   background: var(--color-text-muted);
 }
 
-.legend-swatch.pos-cl { background: var(--color-success); }
-.legend-swatch.pos-el { background: var(--color-info); }
-.legend-swatch.pos-relegation { background: var(--color-danger); }
+.legend-swatch.pos-cl {
+  background: var(--color-success);
+}
+.legend-swatch.pos-el {
+  background: var(--color-info);
+}
+.legend-swatch.pos-relegation {
+  background: var(--color-danger);
+}
 
 .empty-standings {
   text-align: center;
@@ -367,7 +393,9 @@ body {
   cursor: pointer;
   text-decoration: none;
   border-radius: var(--radius-sm, 4px);
-  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    text-decoration-color 0.15s ease;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
@@ -389,18 +417,44 @@ body {
   font-weight: 500;
 }
 
-.stat-wins { color: var(--color-success); }
-.stat-draws { color: var(--color-warning); }
-.stat-losses { color: var(--color-danger); }
+.stat-wins {
+  color: var(--color-success);
+}
+.stat-draws {
+  color: var(--color-warning);
+}
+.stat-losses {
+  color: var(--color-danger);
+}
 
-.team-position.pos-cl { color: var(--color-success); font-weight: 700; }
-.team-position.pos-el { color: var(--color-info); font-weight: 700; }
-.team-position.pos-relegation { color: var(--color-danger); font-weight: 700; }
-.team-position.pos-mid { color: var(--color-text-muted); }
+.team-position.pos-cl {
+  color: var(--color-success);
+  font-weight: 700;
+}
+.team-position.pos-el {
+  color: var(--color-info);
+  font-weight: 700;
+}
+.team-position.pos-relegation {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+.team-position.pos-mid {
+  color: var(--color-text-muted);
+}
 
-.cell-center.gd-positive { color: var(--color-success); font-weight: 700; }
-.cell-center.gd-negative { color: var(--color-danger); font-weight: 700; }
-.cell-center.gd-zero { color: var(--color-text-muted); font-weight: 700; }
+.cell-center.gd-positive {
+  color: var(--color-success);
+  font-weight: 700;
+}
+.cell-center.gd-negative {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+.cell-center.gd-zero {
+  color: var(--color-text-muted);
+  font-weight: 700;
+}
 
 .team-crest {
   width: 2rem;
@@ -474,7 +528,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Animation keyframes */
@@ -542,11 +598,13 @@ body {
 
 .error-container {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right))
+    max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
 }
 
 .error-message {
@@ -624,19 +682,19 @@ body {
 }
 
 /* Dark theme overrides (variables set in [data-theme="dark"] above) */
-[data-theme="dark"] .theme-toggle-button {
+[data-theme='dark'] .theme-toggle-button {
   background-color: var(--color-accent);
   color: #111827;
 }
 
-[data-theme="dark"] .theme-toggle-button:hover {
+[data-theme='dark'] .theme-toggle-button:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-lg);
   background-color: #d97706;
 }
 
 /* Dark mode selected league */
-[data-theme="dark"] .league-button.active {
+[data-theme='dark'] .league-button.active {
   background-color: #f59e0b !important;
   color: #111827 !important;
   border: 2px solid #fbbf24 !important;
@@ -647,7 +705,7 @@ body {
   animation: activePulseDark 2s ease-in-out infinite;
 }
 
-[data-theme="dark"] .league-button.active:hover {
+[data-theme='dark'] .league-button.active:hover {
   background-color: #d97706 !important;
   color: #111827 !important;
   border-color: #fbbf24 !important;
@@ -656,7 +714,8 @@ body {
 }
 
 @keyframes activePulseDark {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
   }
 
@@ -721,22 +780,53 @@ body {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
-.table-row:nth-child(1) { animation-delay: 0.1s; opacity: 0; }
-.table-row:nth-child(2) { animation-delay: 0.15s; opacity: 0; }
-.table-row:nth-child(3) { animation-delay: 0.2s; opacity: 0; }
-.table-row:nth-child(4) { animation-delay: 0.25s; opacity: 0; }
-.table-row:nth-child(5) { animation-delay: 0.3s; opacity: 0; }
-.table-row:nth-child(6) { animation-delay: 0.35s; opacity: 0; }
-.table-row:nth-child(7) { animation-delay: 0.4s; opacity: 0; }
-.table-row:nth-child(8) { animation-delay: 0.45s; opacity: 0; }
-.table-row:nth-child(9) { animation-delay: 0.5s; opacity: 0; }
-.table-row:nth-child(10) { animation-delay: 0.55s; opacity: 0; }
+.table-row:nth-child(1) {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+.table-row:nth-child(2) {
+  animation-delay: 0.15s;
+  opacity: 0;
+}
+.table-row:nth-child(3) {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+.table-row:nth-child(4) {
+  animation-delay: 0.25s;
+  opacity: 0;
+}
+.table-row:nth-child(5) {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+.table-row:nth-child(6) {
+  animation-delay: 0.35s;
+  opacity: 0;
+}
+.table-row:nth-child(7) {
+  animation-delay: 0.4s;
+  opacity: 0;
+}
+.table-row:nth-child(8) {
+  animation-delay: 0.45s;
+  opacity: 0;
+}
+.table-row:nth-child(9) {
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+.table-row:nth-child(10) {
+  animation-delay: 0.55s;
+  opacity: 0;
+}
 
 /* Footer styles */
 .footer {
   background-color: var(--color-bg);
   border-top: 1px solid var(--color-border);
   padding: 1.5rem 0;
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   margin-top: 3rem;
   text-align: center;
 }
@@ -757,21 +847,28 @@ body {
 /* Responsive design */
 @media (max-width: 600px) {
   .container {
-    padding: 0.5rem;
     max-width: 100%;
+    padding: 0.75rem;
+    padding-top: max(3.25rem, calc(env(safe-area-inset-top) + 2.75rem));
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
   }
-  
+
+  .hero {
+    padding-inline: 0.5rem;
+  }
+
   /* Header improvements for mobile */
   h1 {
     font-size: 1.5rem !important;
     margin-bottom: 0.25rem !important;
   }
-  
+
   p {
     font-size: 0.875rem !important;
     margin-bottom: 0.25rem !important;
   }
-  
+
   /* Season selector mobile improvements */
   .season-button {
     padding: 0.5rem 0.75rem !important;
@@ -779,52 +876,57 @@ body {
     min-width: 60px;
     min-height: 2.75rem; /* 44px touch target */
   }
-  
+
   /* League buttons mobile layout */
+  .league-buttons-wrap {
+    width: 100%;
+  }
+
   .league-button {
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
-    margin: 0.25rem;
-    flex: 1;
+    margin: 0;
+    flex: 1 1 calc(50% - 0.5rem);
     min-height: 2.75rem;
-    min-width: calc(50% - 0.5rem);
+    min-width: 0;
     max-width: calc(50% - 0.5rem);
   }
-  
+
   /* Header content mobile layout */
   .header-content {
     flex-direction: column;
     gap: 0.75rem;
-    padding: 0.5rem;
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
   }
-  
+
   /* Table mobile: scroll container and readable cells */
   .standings-table-wrap {
     margin: 0 -0.5rem; /* extend to container edge for full-width scroll */
     padding: 0 0.5rem;
     border-radius: var(--radius-md);
   }
-  
+
   .standings-table {
     font-size: 0.8125rem; /* slightly larger for readability */
     display: table;
     width: max-content;
     min-width: 100%;
   }
-  
+
   .standings-table th,
   .standings-table td {
     padding: 0.5rem 0.375rem;
     min-width: 2.5rem;
   }
-  
+
   .standings-table th:first-child {
     min-width: 2rem;
     position: sticky;
     left: 0;
     background: var(--color-bg);
     z-index: 2;
-    box-shadow: 2px 0 4px -2px rgba(0,0,0,0.08);
+    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.08);
   }
   .standings-table td:first-child {
     min-width: 2rem;
@@ -832,32 +934,32 @@ body {
     left: 0;
     background: var(--color-bg-elevated);
     z-index: 1;
-    box-shadow: 2px 0 4px -2px rgba(0,0,0,0.06);
+    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.06);
   }
   .standings-table tr:hover td:first-child {
     background: var(--color-bg);
   }
-  
+
   .standings-table th:nth-child(2),
   .standings-table td:nth-child(2) {
     min-width: 7rem; /* team name column */
   }
-  
+
   /* Team crest and name mobile */
   .team-crest {
     width: 1.75rem;
     height: 1.75rem;
   }
-  
+
   .team-name {
     gap: 0.5rem;
   }
-  
+
   .team-name-link {
-    min-height: 2.25rem;
+    min-height: 2.75rem;
     padding: 0.3rem 0.25rem 0.3rem 0;
   }
-  
+
   /* Theme toggle: 44px touch target, safe area */
   .theme-toggle-button {
     top: max(0.5rem, env(safe-area-inset-top));
@@ -867,23 +969,23 @@ body {
     min-width: 2.75rem;
     min-height: 2.75rem;
   }
-  
+
   /* Footer mobile */
   .footer {
     padding: 1rem 0;
     margin-top: 1.5rem;
   }
-  
+
   .footer-content p {
     font-size: 0.75rem;
   }
-  
+
   /* Loading spinner mobile */
   .loading-spinner {
     width: 2rem;
     height: 2rem;
   }
-  
+
   /* League logo mobile */
   .league-logo {
     width: 4rem;
@@ -894,67 +996,100 @@ body {
 /* Extra small screens */
 @media (max-width: 480px) {
   .container {
-    padding: 0.5rem;
     padding-left: max(0.5rem, env(safe-area-inset-left));
     padding-right: max(0.5rem, env(safe-area-inset-right));
   }
-  
+
   .hero {
     margin-bottom: 1.25rem;
   }
-  
+
   h1 {
     font-size: 1.25rem !important;
   }
-  
+
   .league-button {
     font-size: 0.8125rem;
     padding: 0.5rem 0.5rem;
     min-height: 2.75rem;
-    min-width: calc(50% - 0.25rem);
-    max-width: calc(50% - 0.25rem);
+    flex-basis: calc(50% - 0.5rem);
+    max-width: calc(50% - 0.5rem);
   }
-  
+
   .season-button {
     padding: 0.5rem 0.5rem !important;
     font-size: 0.8125rem !important;
     min-height: 2.75rem;
   }
-  
+
   .standings-table {
     font-size: 0.75rem;
   }
-  
+
   .standings-table th,
   .standings-table td {
     padding: 0.375rem 0.25rem;
   }
-  
+
   .team-crest {
     width: 1.5rem;
     height: 1.5rem;
   }
-  
+
   .content {
     margin-top: 1.25rem;
   }
-  
+
   /* Mobile-specific animations (shorter) */
   .fade-in {
     animation-duration: 0.4s;
   }
-  
+
   .slide-in-left,
   .slide-in-right {
     animation-duration: 0.3s;
   }
-  
+
   .scale-in {
     animation-duration: 0.3s;
   }
-  
+
   .bounce-in {
     animation-duration: 0.4s;
+  }
+}
+
+/* Short landscape screens (phones held sideways on iOS and Android) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    margin-bottom: 0.75rem;
+    padding-inline: 3.25rem;
+  }
+
+  .container {
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+  }
+
+  .league-info {
+    margin-bottom: 0.5rem;
+  }
+
+  .league-logo {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .league-buttons-wrap {
+    width: 100%;
+  }
+
+  .league-button {
+    margin: 0;
+    flex: 1 1 0;
+    max-width: none;
+    min-width: 0;
+    padding-inline: 0.4rem;
   }
 }
 
@@ -963,22 +1098,22 @@ body {
   .container {
     padding: 0.5rem;
   }
-  
+
   h1 {
     font-size: 1.25rem !important;
     margin-bottom: 0.125rem !important;
   }
-  
+
   .league-button {
     padding: 0.5rem 0.5rem;
     font-size: 0.8125rem;
     min-height: 2.75rem;
   }
-  
+
   .standings-table {
     font-size: 0.75rem;
   }
-  
+
   .standings-table th,
   .standings-table td {
     padding: 0.375rem 0.25rem;
@@ -1212,6 +1347,96 @@ body {
   }
 }
 
+/* Tablets: iPad and typical Android tablets, portrait and landscape */
+@media (min-width: 768px) and (min-height: 600px) and (max-width: 1024px) {
+  .container {
+    padding-top: max(4.5rem, calc(env(safe-area-inset-top) + 3rem));
+  }
+
+  h1 {
+    font-size: 1.875rem;
+  }
+
+  .league-logo {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .league-buttons-wrap {
+    width: 100%;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+
+  .league-button {
+    margin: 0;
+    flex: 1 1 calc(33.333% - 0.5rem);
+    max-width: calc(33.333% - 0.5rem);
+    min-height: 2.75rem;
+  }
+
+  .team-detail-sheet {
+    max-width: 32rem;
+  }
+
+  .team-detail-squad-scroll {
+    max-height: 22rem;
+  }
+}
+
+/* Phones and tablets: keep position and team visible while stats scroll */
+@media (max-width: 1024px) {
+  .standings-table th:first-child,
+  .standings-table td:first-child {
+    position: sticky;
+    left: 0;
+    width: 2.25rem;
+    min-width: 2.25rem;
+    max-width: 2.25rem;
+    z-index: 2;
+    background: var(--color-bg-elevated);
+  }
+
+  .standings-table th:first-child {
+    z-index: 3;
+    background: var(--color-bg);
+  }
+
+  .standings-table th:nth-child(2),
+  .standings-table td:nth-child(2) {
+    position: sticky;
+    left: 2.25rem;
+    z-index: 1;
+    background: var(--color-bg-elevated);
+    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.06);
+  }
+
+  .standings-table th:nth-child(2) {
+    z-index: 2;
+    background: var(--color-bg);
+  }
+
+  .standings-table tr:hover td:nth-child(2) {
+    background: var(--color-bg);
+  }
+
+  .team-name {
+    flex-wrap: nowrap;
+  }
+
+  .team-name-link {
+    white-space: nowrap;
+  }
+}
+
+@media (hover: none) {
+  .league-button:hover,
+  .league-button.active:hover,
+  .season-button:hover {
+    transform: none;
+  }
+}
+
 /* Respect reduced motion preference (accessibility) */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -1221,11 +1446,11 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  
+
   .theme-toggle-button {
     animation: none;
   }
-  
+
   .league-button,
   .season-button {
     transition: none;
