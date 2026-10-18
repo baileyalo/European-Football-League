@@ -4,8 +4,8 @@ A React app that shows live standings for top European football leagues (Premier
 
 ## Features
 
-- **Live standings** – View tables for multiple leagues and seasons
-- **Team details** – Tap a team name to open a centered sheet with stadium, coach, top scorer (for current league/season), squad list, and a “Visit website” link (data from Football Data API). Escape to close; body scroll locked while open; shows “No website available” when a team has no URL.
+- **Live standings** – View tables for multiple leagues and seasons, with a color key for Champions League, Europa League, and relegation places
+- **Team details** – Tap a team name to open a centered sheet with stadium, coach, top scorer (for current league/season), squad list, and a “Visit website” link (data from Football Data API). Escape to close; body scroll locked while open; load failures stay in the sheet instead of a browser alert; shows “No website available” when a team has no URL.
 - **Dark / light theme** – Toggle with system preference support and persistence
 - **Responsive layout** – Works on mobile and desktop (team detail is a small centered card on mobile)
 - **Performance** – Memoized components, data-driven rendering, CSS variables for theming
@@ -60,7 +60,8 @@ src/
 ├── api/
 │   └── footballApi.ts     # fetchStandings(), fetchTeam(), fetchScorers() (via Netlify functions)
 ├── constants/
-│   └── leagues.ts        # LEAGUES map, SEASON_OPTIONS
+│   ├── leagues.ts        # LEAGUES, SEASON_OPTIONS, league logo paths
+│   └── standingsColumns.ts # Standings table column labels and titles
 ├── hooks/
 │   ├── useStandings.ts   # Standings data, loading, error, retry
 │   └── useTheme.ts       # Theme state & localStorage
@@ -70,6 +71,7 @@ src/
 │   ├── Header.tsx
 │   ├── LeagueInfo.tsx    # League logo & title
 │   ├── Row.tsx           # Standings table row (team name opens detail)
+│   ├── StandingsLegend.tsx # Color key for European places and relegation
 │   ├── TableBody.tsx     # Standings table wrapper
 │   ├── TeamDetail.tsx    # Team detail modal (stadium, coach, top scorer, squad, website; Escape to close)
 │   └── ThemeToggle.tsx
@@ -99,10 +101,10 @@ Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@te
 | Shows error state with retry | When `useStandings` returns an `error`, error message and "Try Again" button are shown; clicking the button calls the retry handler. |
 | Shows standings content when data is loaded | League name heading and team name from mock standings (e.g. "Team A") are displayed. |
 | Renders league selection buttons | Premier League, La Liga, Bundesliga (and other league) buttons are present. |
-| Renders season selection buttons | 2024 and 2025 season buttons are present. |
+| Renders season selection buttons | 2024, 2025, and 2026 season buttons are present. |
 | Calls useStandings with initial league and season | Hook is invoked with default league id `'PL'` and current season string. |
 | Displays Select Season heading | "Select Season" heading is rendered. |
-| Team name opens detail sheet; Visit website opens team site | Tapping a team name fetches team data and opens a detail sheet (stadium, coach, squad); "Visit website" opens the team site in a new tab (mocked). |
+| Team name opens detail sheet; Visit website opens team site | Tapping a team name (labeled “View details”) fetches team data and opens a detail sheet (stadium, coach, squad); "Visit website" opens the team site in a new tab (mocked). |
 | Top scorer in team detail | When the scorers API returns data for the current league/season, the team’s top scorer (name and goals) is shown in the detail sheet. |
 
 ## Tech stack

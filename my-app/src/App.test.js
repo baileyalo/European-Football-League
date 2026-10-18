@@ -138,6 +138,7 @@ it('renders season selection buttons', () => {
   render(<App />);
   expect(screen.getByRole('button', { name: '2024' })).toBeInTheDocument();
   expect(screen.getByRole('button', { name: '2025' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '2026' })).toBeInTheDocument();
 });
 
 it('calls useStandings with initial league and season', () => {
@@ -153,7 +154,7 @@ it('displays Select Season heading', () => {
 it('team name opens team detail sheet; Visit website opens team site', async () => {
   const openSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
   render(<App />);
-  const teamNameButton = screen.getByRole('button', { name: /Visit Team A website/i });
+  const teamNameButton = screen.getByRole('button', { name: /View details for Team A/i });
   await userEvent.click(teamNameButton);
   expect(fetchTeam).toHaveBeenCalledWith(1);
   await waitFor(() => {
@@ -173,7 +174,7 @@ it('team name opens team detail sheet; Visit website opens team site', async () 
 it('shows top scorer in team detail when scorers API returns data for that team', async () => {
   mockScorersWithTopScorer();
   render(<App />);
-  const teamNameButton = screen.getByRole('button', { name: /Visit Team A website/i });
+  const teamNameButton = screen.getByRole('button', { name: /View details for Team A/i });
   await userEvent.click(teamNameButton);
   await waitFor(() => {
     const dialog = screen.getByRole('dialog');

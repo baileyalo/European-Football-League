@@ -17,7 +17,7 @@ function groupSquad(squad: SquadPlayer[]): { position: string; players: SquadPla
   });
   return Object.entries(byPosition)
     .sort(([a], [b]) => (POSITION_ORDER[a] ?? 99) - (POSITION_ORDER[b] ?? 99))
-    .map(([position, players]) => ({
+    .map(([position, players]: [string, SquadPlayer[]]) => ({
       position,
       players: players.sort((a, b) => a.shirtNumber - b.shirtNumber),
     }));
@@ -31,6 +31,7 @@ export interface TopScorer {
 interface TeamDetailProps {
   team: TeamInfo | null;
   loading: boolean;
+  error: string | null;
   topScorer: TopScorer | null;
   onClose: () => void;
   onVisitWebsite: (url: string) => void;
@@ -39,6 +40,7 @@ interface TeamDetailProps {
 const TeamDetail: React.FC<TeamDetailProps> = ({
   team,
   loading,
+  error,
   topScorer,
   onClose,
   onVisitWebsite,
@@ -50,33 +52,51 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
 
+  const isOpen = Boolean(team || loading || error);
+
   useEffect(() => {
-    if (!team && !loading) return;
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [team, loading, onClose]);
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     if (loading) {
       sheetRef.current?.focus();
-    } else if (team) {
+    } else if (team || error) {
       closeButtonRef.current?.focus();
     }
-  }, [loading, team]);
+  }, [loading, team, error]);
 
-  if (!team && !loading) return null;
+  if (!isOpen) return null;
 
   return (
-    <div className="team-detail-overlay" role="dialog" aria-modal="true" aria-labelledby="team-detail-title">
+    <div
+      className="team-detail-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={team ? 'team-detail-title' : undefined}
+      aria-label={team ? undefined : error ? 'Couldn’t load team' : 'Loading team'}
+    >
       <div className="team-detail-backdrop" onClick={onClose} aria-hidden />
       <div className="team-detail-sheet" ref={sheetRef} tabIndex={-1}>
         {loading ? (
-          <div className="team-detail-loading">
+          <div className="team-detail-loading" role="status">
             <div className="loading-spinner" aria-hidden />
             <span className="loading-text">Loading team…</span>
+          </div>
+        ) : error ? (
+          <div className="team-detail-error">
+            <h2 id="team-detail-title" className="team-detail-title">Couldn’t load team</h2>
+            <p className="error-detail">{error}</p>
+            <div className="team-detail-actions">
+              <button type="button" className="team-detail-close-btn" onClick={onClose} ref={closeButtonRef}>
+                Close
+              </button>
+            </div>
           </div>
         ) : team ? (
           <>

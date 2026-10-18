@@ -1,31 +1,24 @@
 import React from 'react';
 import { TableBodyProps } from '../types';
+import { STANDINGS_COLUMNS } from '../constants/standingsColumns';
 
-const TableBody: React.FC<TableBodyProps> = React.memo(({ children }) => {
-    return (
-        <div className="standings-table-wrap" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-            <table className="standings-table">
-                <thead>
-                    <tr>
-                        <th style={{ width: '3rem' }}>#</th>
-                        <th style={{ minWidth: '12rem' }}>Team</th>
-                        <th style={{ width: '4rem' }} title="Matches played">MP</th>
-                        <th style={{ width: '4rem' }} title="Wins">W</th>
-                        <th style={{ width: '4rem' }} title="Draws">D</th>
-                        <th style={{ width: '4rem' }} title="Losses">L</th>
-                        <th style={{ width: '4rem' }} title="Goals for">GF</th>
-                        <th style={{ width: '4rem' }} title="Goals against">GA</th>
-                        <th style={{ width: '4rem' }} title="Goals difference">GD</th>
-                        <th style={{ width: '4rem' }} title="Team points">PTS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {children}
-                </tbody>
-            </table>
-        </div>
-    );
-});
+const TableBody: React.FC<TableBodyProps> = React.memo(({ children }) => (
+  <div className="standings-table-wrap">
+    <table className="standings-table">
+      <caption className="standings-caption">League standings</caption>
+      <thead>
+        <tr>
+          {STANDINGS_COLUMNS.map((column) => (
+            <th key={column.key} scope="col" className={column.className} title={column.title}>
+              {column.label}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>{children}</tbody>
+    </table>
+  </div>
+));
 TableBody.displayName = 'TableBody';
 
 export default TableBody;

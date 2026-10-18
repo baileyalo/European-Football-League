@@ -20,7 +20,7 @@ Add these in Site Settings > Environment Variables:
 
 **Optional (app display):**
 - `REACT_APP_APP_NAME` – e.g. European Football League
-- `REACT_APP_CURRENT_SEASON` – e.g. 2024
+- `REACT_APP_CURRENT_SEASON` – starting season, one of `2024`, `2025`, or `2026` (default `2026`)
 
 ### 📋 Deployment Steps:
 
@@ -68,5 +68,6 @@ See the root **README.md** → **Testing** for full test documentation (setup, t
 - **Environment Variables:** Secure API configuration
 - **Production Build:** Optimized and minified
 - **Tests:** Jest + React Testing Library; 11 App tests (see README)
-- **Team detail:** `netlify/functions/team.js` fetches team data (stadium, coach, squad, website). `netlify/functions/scorers.js` fetches top scorers per league/season for the “top scorer” line. Team detail is a centered modal (smaller on mobile), with Escape to close and body scroll locked when open.
+- **Team detail:** `netlify/functions/team.js` fetches team data (stadium, coach, squad, website). `netlify/functions/scorers.js` fetches top scorers per league/season for the “top scorer” line. The sheet is a centered modal (smaller on mobile). Escape closes it, page scroll is locked while it is open, and a failed team request is shown in the sheet.
+- **Standings key:** Position colors mark Champions League, Europa League, and relegation places. Seasons available in the app are 2024, 2025, and 2026.
 

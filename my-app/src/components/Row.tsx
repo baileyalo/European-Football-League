@@ -6,7 +6,7 @@ const Row: React.FC<RowProps> = React.memo(({
     crest,
     teamName,
     teamId,
-    onVisitWebsite,
+    onSelectTeam,
     playedGames,
     wins,
     draws,
@@ -33,9 +33,9 @@ const Row: React.FC<RowProps> = React.memo(({
                 <button
                     type="button"
                     className="team-name-link"
-                    onClick={() => onVisitWebsite(teamId)}
-                    title={`Visit ${teamName} website`}
-                    aria-label={`Visit ${teamName} website`}
+                    onClick={() => onSelectTeam(teamId)}
+                    title={`View details for ${teamName}`}
+                    aria-label={`View details for ${teamName}`}
                 >
                     {teamName}
                 </button>

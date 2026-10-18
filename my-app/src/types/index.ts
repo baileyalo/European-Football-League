@@ -40,7 +40,7 @@ export interface StandingsResponse {
 
 // Component Props Types
 export interface ButtonProps {
-  handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleClick: (leagueId: string) => void;
   leagueId: string;
   text: string;
   isActive?: boolean;
@@ -68,7 +68,7 @@ export interface RowProps {
   crest: string;
   teamName: string;
   teamId: number;
-  onVisitWebsite: (teamId: number) => void;
+  onSelectTeam: (teamId: number) => void;
   playedGames: number;
   wins: number;
   draws: number;

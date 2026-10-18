@@ -4,38 +4,39 @@ import Button from './components/Button';
 import Row from './components/Row';
 import TableBody from './components/TableBody';
 import LeagueInfo from './components/LeagueInfo';
+import StandingsLegend from './components/StandingsLegend';
 import ThemeToggle from './components/ThemeToggle';
 import Footer from './components/Footer';
 import TeamDetail from './components/TeamDetail';
 import { useTheme } from './hooks/useTheme';
 import { useStandings } from './hooks/useStandings';
 import { fetchTeam, fetchScorers } from './api/footballApi';
-import type { TeamInfo } from './types';
-import type { ScorerEntry } from './types';
+import type { ScorerEntry, TeamInfo } from './types';
 import { LEAGUES, SEASON_OPTIONS } from './constants/leagues';
 
 
 const App: React.FC = () => {
   const [leagueId, setLeagueId] = React.useState('PL');
-  const [season, setSeason] = React.useState('2026');
+  const [season, setSeason] = React.useState(process.env.REACT_APP_CURRENT_SEASON || '2026');
   const [selectedTeam, setSelectedTeam] = useState<TeamInfo | null>(null);
   const [teamDetailLoading, setTeamDetailLoading] = useState(false);
+  const [teamDetailError, setTeamDetailError] = useState<string | null>(null);
   const [scorersCache, setScorersCache] = useState<Record<string, ScorerEntry[]>>({});
   const { isDarkMode, toggleTheme } = useTheme();
   const { leagueName, standings, isLoading, error, retry } = useStandings(leagueId, season);
 
-  const handleLeagueClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    const id = e.currentTarget.getAttribute('data-leagueid');
-    if (id) setLeagueId(id);
+  const handleLeagueClick = useCallback((id: string) => {
+    setLeagueId(id);
   }, []);
 
   const handleTeamNameClick = useCallback(async (teamId: number) => {
     setSelectedTeam(null);
+    setTeamDetailError(null);
     setTeamDetailLoading(true);
     const result = await fetchTeam(teamId);
     setTeamDetailLoading(false);
     if (result.error) {
-      alert(result.error);
+      setTeamDetailError(result.error);
       return;
     }
     if (result.data) setSelectedTeam(result.data);
@@ -43,6 +44,7 @@ const App: React.FC = () => {
 
   const handleCloseTeamDetail = useCallback(() => {
     setSelectedTeam(null);
+    setTeamDetailError(null);
   }, []);
 
   const handleVisitWebsiteFromDetail = useCallback((url: string) => {
@@ -51,12 +53,12 @@ const App: React.FC = () => {
 
   // Lock body scroll when team detail is open
   React.useEffect(() => {
-    const open = selectedTeam !== null || teamDetailLoading;
+    const open = selectedTeam !== null || teamDetailLoading || teamDetailError !== null;
     document.body.style.overflow = open ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
-  }, [selectedTeam, teamDetailLoading]);
+  }, [selectedTeam, teamDetailLoading, teamDetailError]);
 
   // Load scorers for current league/season when team detail is open (for top scorer)
   React.useEffect(() => {
@@ -79,7 +81,7 @@ const App: React.FC = () => {
 
   const leagueButtons = useMemo(
     () =>
-      Object.entries(LEAGUES).map(([name, id], index) => (
+      Object.entries(LEAGUES).map(([name, id]: [string, string], index: number) => (
         <Button
           key={id}
           handleClick={handleLeagueClick}
@@ -101,7 +103,7 @@ const App: React.FC = () => {
         crest={item.team.crest}
         teamName={item.team.name}
         teamId={item.team.id}
-        onVisitWebsite={handleTeamNameClick}
+        onSelectTeam={handleTeamNameClick}
         playedGames={item.playedGames}
         wins={item.won}
         draws={item.draw}
@@ -162,14 +164,19 @@ const App: React.FC = () => {
 
         <div className="content">
           {isLoading ? (
-            <div className="loading-wrap bounce-in">
+            <div className="loading-wrap bounce-in" role="status" aria-live="polite" aria-busy="true">
               <div className="loading-spinner" aria-hidden />
               <span className="loading-text">Loading standings...</span>
             </div>
           ) : (
             <div className="standings-wrap fade-in animate-delay-3">
               <LeagueInfo leagueCaption={leagueName} season={season} />
-              <TableBody>{tableRows}</TableBody>
+              <StandingsLegend />
+              {standings && standings.length > 0 ? (
+                <TableBody>{tableRows}</TableBody>
+              ) : (
+                <p className="empty-standings" role="status">No standings for this league and season.</p>
+              )}
             </div>
           )}
         </div>
@@ -178,6 +185,7 @@ const App: React.FC = () => {
       <TeamDetail
         team={selectedTeam}
         loading={teamDetailLoading}
+        error={teamDetailError}
         topScorer={topScorerForSelected}
         onClose={handleCloseTeamDetail}
         onVisitWebsite={handleVisitWebsiteFromDetail}
