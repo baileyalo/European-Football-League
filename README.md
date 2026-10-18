@@ -1,6 +1,6 @@
-# European Football League Standings
+# Football Standings
 
-A React app that shows live standings for top European football leagues (Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie). Built with Create React App and TypeScript.
+A React app that shows live football standings for the Premier League, La Liga, Bundesliga, Serie A, Ligue 1, and Eredivisie. Built with Create React App and TypeScript. Current release: **1.0.1**. See [Release notes](RELEASE_NOTES.md).
 
 ## Features
 
@@ -27,7 +27,7 @@ A React app that shows live standings for top European football leagues (Premier
 2. **Configure environment**
 
    - **Local dev with Netlify** (recommended): run `netlify dev` so the app and the standings proxy function run together. Set `FOOTBALL_API_TOKEN` and optionally `FOOTBALL_API_URL` in a `.env` file (see `.env.example`).
-   - **Local dev with `npm start` only**: create `.env` and set `REACT_APP_STANDINGS_API_URL` to your deployed site (e.g. `https://euleague.netlify.app`) so the app calls that site’s function. No token in the client.
+   - **Local dev with `npm start` only**: leave `REACT_APP_STANDINGS_API_URL` unset. The dev server proxies `/.netlify/functions` to the deployed site (`proxy` in `package.json`), so the browser stays on localhost. Setting that variable to the deployed URL calls it directly and the browser blocks the response until the functions are redeployed with CORS headers.
 
 3. **Run the app**
 
@@ -51,6 +51,7 @@ A React app that shows live standings for top European football leagues (Premier
 | `npm test`     | Run tests (watch mode)        |
 | `npm test -- --watchAll=false` | Run tests once (e.g. for CI) |
 | `npm run build`| Production build in `build/`  |
+| `npm run format` | Format the app with Prettier |
 | `npm run eject`| Eject from Create React App   |
 
 ## Project structure
@@ -71,7 +72,7 @@ src/
 │   ├── Header.tsx
 │   ├── LeagueInfo.tsx    # League logo & title
 │   ├── Row.tsx           # Standings table row (team name opens detail)
-│   ├── StandingsLegend.tsx # Color key for European places and relegation
+│   ├── StandingsLegend.tsx # Color key for continental places and relegation
 │   ├── TableBody.tsx     # Standings table wrapper
 │   ├── TeamDetail.tsx    # Team detail modal (stadium, coach, top scorer, squad, website; Escape to close)
 │   └── ThemeToggle.tsx
@@ -90,13 +91,14 @@ Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@te
 
 - **Setup:** `src/setupTests.js` imports `@testing-library/jest-dom` so matchers like `toBeInTheDocument()` and `toHaveTextContent()` are available.
 - **Run tests:** From `my-app`, run `npm test` (watch mode) or `npm test -- --watchAll=false` for a single run (e.g. in CI).
+- **CI:** `.github/workflows/test.yml` runs that single test pass on every push to `main` and on every pull request into `main`.
 
 ### Test cases (`src/App.test.js`)
 
 | Test | Description |
 |------|-------------|
 | Renders without crashing | App mounts and unmounts without errors (wrapped in `act()`). |
-| Displays main title and subtitle | Main heading contains "Standings"; subtitle "Live standings from top European leagues" is present. |
+| Displays main title and subtitle | Main heading shows the app name (or "Football Standings"); subtitle "Live football standings" is present. |
 | Shows loading state | When `useStandings` returns `isLoading: true`, "Loading standings..." is shown. |
 | Shows error state with retry | When `useStandings` returns an `error`, error message and "Try Again" button are shown; clicking the button calls the retry handler. |
 | Shows standings content when data is loaded | League name heading and team name from mock standings (e.g. "Team A") are displayed. |
@@ -106,6 +108,12 @@ Tests use **Jest** and **React Testing Library** (`@testing-library/react`, `@te
 | Displays Select Season heading | "Select Season" heading is rendered. |
 | Team name opens detail sheet; Visit website opens team site | Tapping a team name (labeled “View details”) fetches team data and opens a detail sheet (stadium, coach, squad); "Visit website" opens the team site in a new tab (mocked). |
 | Top scorer in team detail | When the scorers API returns data for the current league/season, the team’s top scorer (name and goals) is shown in the detail sheet. |
+| Loads the selected league and season | 2026 starts selected. Choosing La Liga requests `PD` for 2026; choosing 2024 then requests that season. |
+| Shows position, matches played, and points | The Team A row shows position `1`, 10 matches played, and 25 points. |
+| Shows an empty standings message | An empty table shows "No standings for this league and season" and no team buttons. |
+| Shows a team load failure in the detail sheet | A failed team request shows the error in the sheet and does not open a new tab. |
+| Shows that a team has no website | A team with no URL shows "No website available" and does not open a tab. |
+| Escape closes the team detail sheet | Pressing Escape removes the open team sheet. |
 
 ## Tech stack
 
