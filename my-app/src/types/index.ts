@@ -50,7 +50,8 @@ export interface ButtonProps {
 export interface SquadPlayer {
   name: string;
   position: string;
-  shirtNumber: number;
+  /** Null when Football Data has not published a shirt number for the player. */
+  shirtNumber: number | null;
 }
 
 export interface TeamInfo {

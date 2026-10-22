@@ -69,7 +69,9 @@ exports.handler = async (event) => {
       ? data.squad.map((p) => ({
           name: p.name || '',
           position: p.position || '',
-          shirtNumber: p.shirtNumber != null ? p.shirtNumber : 0,
+          // Football Data often omits shirt numbers (null). Keep null so the UI
+          // does not show "#0" for every player.
+          shirtNumber: typeof p.shirtNumber === 'number' ? p.shirtNumber : null,
         }))
       : [];
     const coach = data.coach && data.coach.name ? { name: data.coach.name } : null;

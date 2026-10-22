@@ -9,6 +9,11 @@ const POSITION_ORDER: Record<string, number> = {
   Offence: 3,
 };
 
+/** Football Data often omits numbers; older proxies also mapped that to 0. */
+function hasShirtNumber(n: number | null | undefined): n is number {
+  return typeof n === 'number' && n > 0;
+}
+
 function groupSquad(squad: SquadPlayer[]): { position: string; players: SquadPlayer[] }[] {
   const byPosition: Record<string, SquadPlayer[]> = {};
   squad.forEach((p) => {
@@ -20,7 +25,16 @@ function groupSquad(squad: SquadPlayer[]): { position: string; players: SquadPla
     .sort(([a], [b]) => (POSITION_ORDER[a] ?? 99) - (POSITION_ORDER[b] ?? 99))
     .map(([position, players]: [string, SquadPlayer[]]) => ({
       position,
-      players: players.sort((a, b) => a.shirtNumber - b.shirtNumber),
+      players: players.sort((a, b) => {
+        const aShirt = a.shirtNumber;
+        const bShirt = b.shirtNumber;
+        if (!hasShirtNumber(aShirt) && !hasShirtNumber(bShirt)) {
+          return a.name.localeCompare(b.name);
+        }
+        if (!hasShirtNumber(aShirt)) return 1;
+        if (!hasShirtNumber(bShirt)) return -1;
+        return aShirt - bShirt;
+      }),
     }));
 }
 
@@ -155,10 +169,12 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
                       <ul className="team-detail-squad-list">
                         {players.map((player) => (
                           <li
-                            key={`${player.name}-${player.shirtNumber}`}
+                            key={`${player.name}-${player.shirtNumber ?? 'x'}`}
                             className="team-detail-squad-item"
                           >
-                            <span className="team-detail-squad-number">#{player.shirtNumber}</span>
+                            <span className="team-detail-squad-number">
+                              {hasShirtNumber(player.shirtNumber) ? `#${player.shirtNumber}` : '—'}
+                            </span>
                             <span className="team-detail-squad-name">{player.name}</span>
                           </li>
                         ))}
