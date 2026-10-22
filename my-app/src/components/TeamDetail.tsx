@@ -1,4 +1,5 @@
 import React, { useMemo, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import type { TeamInfo, SquadPlayer } from '../types';
 
 const POSITION_ORDER: Record<string, number> = {
@@ -65,15 +66,18 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
 
   useEffect(() => {
     if (loading) {
-      sheetRef.current?.focus();
+      sheetRef.current?.focus({ preventScroll: true });
     } else if (team || error) {
-      closeButtonRef.current?.focus();
+      closeButtonRef.current?.focus({ preventScroll: true });
     }
   }, [loading, team, error]);
 
   if (!isOpen) return null;
 
-  return (
+  // Portal to document.body so position:fixed is relative to the viewport.
+  // The app root keeps a transform from its entrance animation, which would
+  // otherwise pin the overlay to the scrolled page instead of the screen center.
+  return createPortal(
     <div
       className="team-detail-overlay"
       role="dialog"
@@ -189,7 +193,8 @@ const TeamDetail: React.FC<TeamDetailProps> = ({
           </>
         ) : null}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

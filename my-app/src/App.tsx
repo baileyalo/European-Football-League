@@ -50,12 +50,26 @@ const App: React.FC = () => {
     window.open(url, '_blank', 'noopener,noreferrer');
   }, []);
 
-  // Lock body scroll when team detail is open
+  // Lock body scroll without shifting the visual viewport (keeps the modal centered on mobile)
   React.useEffect(() => {
     const open = selectedTeam !== null || teamDetailLoading || teamDetailError !== null;
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (!open) return;
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+    style.overflow = 'hidden';
+    style.position = 'fixed';
+    style.top = `-${scrollY}px`;
+    style.left = '0';
+    style.right = '0';
+    style.width = '100%';
     return () => {
-      document.body.style.overflow = '';
+      style.overflow = '';
+      style.position = '';
+      style.top = '';
+      style.left = '';
+      style.right = '';
+      style.width = '';
+      window.scrollTo(0, scrollY);
     };
   }, [selectedTeam, teamDetailLoading, teamDetailError]);
 
