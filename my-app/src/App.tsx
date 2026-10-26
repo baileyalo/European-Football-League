@@ -133,7 +133,7 @@ const App: React.FC = () => {
     return (
       <div className="error-container">
         <div>
-          <div className="error-message">⚠️ Error Loading Data</div>
+          <div className="error-message">Couldn’t load standings</div>
           <p className="error-detail">{error}</p>
           <button type="button" onClick={retry} className="retry-button">
             Try Again
@@ -145,6 +145,9 @@ const App: React.FC = () => {
 
   return (
     <div className="app-root fade-in">
+      <a href="#main-content" className="skip-link">
+        Skip to standings
+      </a>
       <ThemeToggle isDarkMode={isDarkMode} onToggle={toggleTheme} />
       <div className="container">
         <div className="hero slide-in-left">
@@ -154,8 +157,8 @@ const App: React.FC = () => {
 
         <Header>
           <div className="season-section slide-in-right animate-delay-1">
-            <h3 className="season-heading">Select Season</h3>
-            <div className="season-buttons">
+            <h3 className="season-heading">Season</h3>
+            <div className="season-buttons" role="group" aria-label="Season">
               {SEASON_OPTIONS.map((year) => (
                 <button
                   key={year}
@@ -169,10 +172,16 @@ const App: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="scale-in animate-delay-2 league-buttons-wrap">{leagueButtons}</div>
+          <div
+            className="scale-in animate-delay-2 league-buttons-wrap"
+            role="group"
+            aria-label="League"
+          >
+            {leagueButtons}
+          </div>
         </Header>
 
-        <div className="content">
+        <main id="main-content" className="content" tabIndex={-1}>
           {isLoading ? (
             <div
               className="loading-wrap bounce-in"
@@ -188,7 +197,12 @@ const App: React.FC = () => {
               <LeagueInfo leagueCaption={leagueName} season={season} />
               <StandingsLegend />
               {standings && standings.length > 0 ? (
-                <TableBody>{tableRows}</TableBody>
+                <>
+                  <p className="table-scroll-hint" aria-hidden>
+                    Swipe sideways to see more stats
+                  </p>
+                  <TableBody>{tableRows}</TableBody>
+                </>
               ) : (
                 <p className="empty-standings" role="status">
                   No standings for this league and season.
@@ -196,7 +210,7 @@ const App: React.FC = () => {
               )}
             </div>
           )}
-        </div>
+        </main>
       </div>
       <Footer />
       <TeamDetail

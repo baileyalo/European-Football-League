@@ -2,7 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --color-bg: #f9fafb;
+  color-scheme: light;
+  --color-bg: #f3f4f6;
   --color-bg-elevated: #ffffff;
   --color-text: #111827;
   --color-text-muted: #6b7280;
@@ -12,12 +13,13 @@
   --color-primary-hover: #0369a1;
   --color-accent: #f59e0b;
   --color-success: #16a34a;
-  --color-warning: #eab308;
+  --color-warning: #ca8a04;
   --color-danger: #dc2626;
   --color-info: #2563eb;
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --color-row-hover: #f0f9ff;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -26,15 +28,20 @@
 }
 
 [data-theme='dark'] {
-  --color-bg: #1f2937;
-  --color-bg-elevated: #1f2937;
-  --color-text: #f9fafb;
-  --color-text-muted: #d1d5db;
-  --color-border: #4b5563;
-  --color-border-subtle: #374151;
+  color-scheme: dark;
+  --color-bg: #0f172a;
+  --color-bg-elevated: #1e293b;
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+  --color-border-subtle: #1e293b;
   --color-primary: #38bdf8;
-  --color-primary-hover: #0ea5e9;
+  --color-primary-hover: #7dd3fc;
   --color-accent: #f59e0b;
+  --color-row-hover: #243447;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 32px -12px rgba(0, 0, 0, 0.55);
 }
 
 * {
@@ -46,6 +53,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -60,6 +68,26 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 3000;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: max(0.75rem, env(safe-area-inset-top));
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 /* App layout */
@@ -110,20 +138,26 @@ body {
 .season-button {
   padding: 0.5rem 1rem;
   min-height: 2.75rem; /* 44px min touch target */
-  background-color: var(--color-border-subtle);
+  background-color: var(--color-bg-elevated);
   color: var(--color-text);
-  border: none;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
-  transition: var(--transition-smooth);
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
 
 .season-button:hover {
-  background-color: var(--color-border);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
   transform: translateY(-1px);
 }
 
@@ -133,8 +167,15 @@ body {
 
 .season-button.active {
   background-color: var(--color-primary);
-  color: white;
+  color: #fff;
+  border-color: var(--color-primary);
   box-shadow: var(--shadow-sm);
+}
+
+.season-button.active:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: #fff;
 }
 
 .season-button:focus-visible {
@@ -157,6 +198,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 16rem;
   padding: 3rem 0;
 }
 
@@ -195,27 +237,33 @@ body {
   margin-bottom: 1rem;
 }
 
-/* League buttons */
+/* League buttons: quiet by default, clear when selected */
 .league-button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   min-height: 2.75rem; /* 44px min touch target */
-  margin: 0 0.5rem 0.5rem 0;
-  background-color: var(--color-primary);
-  color: white;
+  margin: 0;
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text);
   font-weight: 500;
   border-radius: var(--radius-md);
-  border: none;
+  border: 1px solid var(--color-border);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  transition: var(--transition-smooth);
+  transition:
+    background-color var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
   box-shadow: var(--shadow-sm);
-  animation: fadeIn 0.5s ease-out forwards;
+  animation: fadeIn 0.45s ease-out forwards;
 }
 
 .league-button:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-2px) scale(1.02);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
@@ -229,32 +277,17 @@ body {
 }
 
 .league-button.active {
-  background-color: var(--color-primary-hover);
-  color: white;
-  box-shadow: 0 4px 8px rgba(2, 132, 199, 0.3);
-  transform: translateY(-1px);
-  border: 2px solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
   font-weight: 600;
-  position: relative;
-  animation:
-    activePulse 2s ease-in-out infinite,
-    fadeIn 0.5s ease-out forwards;
+  box-shadow: var(--shadow-md);
 }
 
 .league-button.active:hover {
   background-color: var(--color-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(2, 132, 199, 0.4);
-}
-
-@keyframes activePulse {
-  0%,
-  100% {
-    box-shadow: 0 4px 8px rgba(2, 132, 199, 0.3);
-  }
-  50% {
-    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.5);
-  }
+  border-color: var(--color-primary-hover);
+  color: #fff;
 }
 
 /* Table wrapper: smooth horizontal scroll on mobile */
@@ -265,6 +298,17 @@ body {
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   border-radius: var(--radius-lg);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.table-scroll-hint {
+  display: none;
+  margin: 0 0 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
 }
 
 .standings-caption {
@@ -339,33 +383,41 @@ body {
 .standings-table {
   width: 100%;
   background-color: var(--color-bg-elevated);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
   border-collapse: collapse;
 }
 
 .standings-table th {
-  background-color: var(--color-bg);
-  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background-color: var(--color-bg-elevated);
+  padding: 0.875rem 1rem;
   text-align: left;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   border-bottom: 1px solid var(--color-border);
 }
 
 .standings-table td {
-  padding: 1rem;
+  padding: 0.875rem 1rem;
   font-size: 0.875rem;
-  border-bottom: 1px solid var(--color-border-subtle);
+  border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
 }
 
-.standings-table tr:hover {
-  background-color: var(--color-bg);
+.standings-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.standings-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.standings-table tbody tr:hover {
+  background-color: var(--color-row-hover);
 }
 
 .team-position {
@@ -501,8 +553,9 @@ body {
 .header {
   background-color: var(--color-bg-elevated);
   box-shadow: var(--shadow-sm);
-  border-bottom: 1px solid var(--color-border);
-  padding: 1rem 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 0.75rem;
 }
 
 .header-content {
@@ -681,47 +734,14 @@ body {
   outline-offset: 2px;
 }
 
-/* Dark theme overrides (variables set in [data-theme="dark"] above) */
+/* Dark theme toggle uses accent for contrast on deep navy bg */
 [data-theme='dark'] .theme-toggle-button {
   background-color: var(--color-accent);
   color: #111827;
 }
 
 [data-theme='dark'] .theme-toggle-button:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-lg);
   background-color: #d97706;
-}
-
-/* Dark mode selected league */
-[data-theme='dark'] .league-button.active {
-  background-color: #f59e0b !important;
-  color: #111827 !important;
-  border: 2px solid #fbbf24 !important;
-  font-weight: 700 !important;
-  opacity: 1 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
-  animation: activePulseDark 2s ease-in-out infinite;
-}
-
-[data-theme='dark'] .league-button.active:hover {
-  background-color: #d97706 !important;
-  color: #111827 !important;
-  border-color: #fbbf24 !important;
-  opacity: 1 !important;
-  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4);
-}
-
-@keyframes activePulseDark {
-  0%,
-  100% {
-    box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
-  }
-
-  50% {
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
-  }
 }
 
 /* Animation classes */
@@ -858,6 +878,10 @@ body {
     padding-inline: 0.5rem;
   }
 
+  .table-scroll-hint {
+    display: block;
+  }
+
   /* Header improvements for mobile */
   h1 {
     font-size: 1.5rem !important;
@@ -924,8 +948,8 @@ body {
     min-width: 2rem;
     position: sticky;
     left: 0;
-    background: var(--color-bg);
-    z-index: 2;
+    background: var(--color-bg-elevated);
+    z-index: 5;
     box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.08);
   }
   .standings-table td:first-child {
@@ -937,7 +961,7 @@ body {
     box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.06);
   }
   .standings-table tr:hover td:first-child {
-    background: var(--color-bg);
+    background: var(--color-row-hover);
   }
 
   .standings-table th:nth-child(2),
@@ -1391,8 +1415,7 @@ body {
   }
 
   .standings-table th:first-child {
-    z-index: 3;
-    background: var(--color-bg);
+    z-index: 5;
   }
 
   .standings-table th:nth-child(2),
@@ -1405,12 +1428,12 @@ body {
   }
 
   .standings-table th:nth-child(2) {
-    z-index: 2;
-    background: var(--color-bg);
+    z-index: 5;
   }
 
+  .standings-table tr:hover td:first-child,
   .standings-table tr:hover td:nth-child(2) {
-    background: var(--color-bg);
+    background: var(--color-row-hover);
   }
 
   .team-name {
@@ -1425,8 +1448,13 @@ body {
 @media (hover: none) {
   .league-button:hover,
   .league-button.active:hover,
-  .season-button:hover {
+  .season-button:hover,
+  .theme-toggle-button:hover {
     transform: none;
+  }
+
+  .standings-table tbody tr:hover {
+    background-color: transparent;
   }
 }
 

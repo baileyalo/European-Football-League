@@ -13,7 +13,13 @@ export function useTheme() {
   useEffect(() => {
     const theme = isDarkMode ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
     localStorage.setItem('theme', theme);
+
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', isDarkMode ? '#0f172a' : '#f3f4f6');
+    }
   }, [isDarkMode]);
 
   return { isDarkMode, toggleTheme: toggle };

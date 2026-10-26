@@ -33,7 +33,7 @@ const Row: React.FC<RowProps> = React.memo(
         <td className={`team-position ${positionClass}`}>{position}</td>
         <td className="team-name">
           <div className="team-crest">
-            <img src={crest} alt={`${teamName} crest`} />
+            <img src={crest} alt="" width={32} height={32} decoding="async" loading="lazy" />
           </div>
           <button
             type="button"

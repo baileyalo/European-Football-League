@@ -113,7 +113,7 @@ it('shows error state with message and retry button when error is set', async ()
     retry: mockRetry,
   });
   render(<App />);
-  expect(screen.getByText(/Error Loading Data/)).toBeInTheDocument();
+  expect(screen.getByText(/Couldn’t load standings/)).toBeInTheDocument();
   expect(screen.getByText(/Network error/)).toBeInTheDocument();
   const retryButton = screen.getByRole('button', { name: /Try Again/i });
   expect(retryButton).toBeInTheDocument();
@@ -146,9 +146,9 @@ it('calls useStandings with initial league and season', () => {
   expect(useStandings).toHaveBeenCalledWith('PL', '2026');
 });
 
-it('displays Select Season heading', () => {
+it('displays Season heading', () => {
   render(<App />);
-  expect(screen.getByRole('heading', { name: /Select Season/i })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /^Season$/i })).toBeInTheDocument();
 });
 
 it('team name opens team detail sheet; Visit website opens team site', async () => {
