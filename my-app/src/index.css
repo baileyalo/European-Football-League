@@ -944,24 +944,9 @@ body {
     min-width: 2.5rem;
   }
 
-  .standings-table th:first-child {
-    min-width: 2rem;
-    position: sticky;
-    left: 0;
-    background: var(--color-bg-elevated);
-    z-index: 5;
-    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.08);
-  }
+  .standings-table th:first-child,
   .standings-table td:first-child {
     min-width: 2rem;
-    position: sticky;
-    left: 0;
-    background: var(--color-bg-elevated);
-    z-index: 1;
-    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.06);
-  }
-  .standings-table tr:hover td:first-child {
-    background: var(--color-row-hover);
   }
 
   .standings-table th:nth-child(2),
@@ -1401,37 +1386,21 @@ body {
   }
 }
 
-/* Phones and tablets: keep position and team visible while stats scroll */
+/* Phones and tablets: lock the team column only while stats scroll sideways */
 @media (max-width: 1024px) {
-  .standings-table th:first-child,
-  .standings-table td:first-child {
-    position: sticky;
-    left: 0;
-    width: 2.25rem;
-    min-width: 2.25rem;
-    max-width: 2.25rem;
-    z-index: 2;
-    background: var(--color-bg-elevated);
-  }
-
-  .standings-table th:first-child {
-    z-index: 5;
-  }
-
   .standings-table th:nth-child(2),
   .standings-table td:nth-child(2) {
     position: sticky;
-    left: 2.25rem;
-    z-index: 1;
+    left: 0;
+    z-index: 2;
     background: var(--color-bg-elevated);
-    box-shadow: 2px 0 4px -2px rgba(0, 0, 0, 0.06);
+    box-shadow: 2px 0 6px -2px rgba(0, 0, 0, 0.12);
   }
 
   .standings-table th:nth-child(2) {
     z-index: 5;
   }
 
-  .standings-table tr:hover td:first-child,
   .standings-table tr:hover td:nth-child(2) {
     background: var(--color-row-hover);
   }
